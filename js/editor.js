@@ -319,52 +319,30 @@ function renderStaffList() {
   setCount("count-staff", state.staff.length);
 }
 
-// 특정 일정 항목에 참가자가 올린 사진들을 운영팀이 확인할 수 있는 뷰어(조회 전용)를 그립니다.
-function renderUploadViewer(container, item, state) {
+// 특정 일정 항목의 구글폼/드라이브 링크 입력칸 + 드라이브 폴더 미리보기(조회 전용)를 그립니다.
+function renderUploadViewer(container, item) {
   container.innerHTML = "";
   if (!item.photoUpload || !item.photoUpload.enabled) return;
+  if (!item.photoUpload.formUrl) item.photoUpload.formUrl = "";
+  if (!item.photoUpload.driveFolderUrl) item.photoUpload.driveFolderUrl = "";
 
-  if (typeof isUploadConfigured !== "function" || !isUploadConfigured()) {
-    container.innerHTML =
-      '<div class="upload-viewer-note">⚠️ 사진 업로드 기능이 아직 설정되지 않았어요. README.md의 "참가자 사진 업로드 기능 설정하기"를 따라 js/firebase-config.js를 채워주세요.</div>';
-    return;
+  container.appendChild(fieldGrid(
+    fieldInput("구글폼 링크 (참가자가 사진 올리는 곳)", item.photoUpload, "formUrl", { span2: true, placeholder: "https://forms.gle/..." }),
+    fieldInput("구글 드라이브 폴더 링크 (응답 파일이 쌓이는 곳)", item.photoUpload, "driveFolderUrl", { span2: true, placeholder: "https://drive.google.com/drive/folders/..." })
+  ));
+
+  const preview = document.createElement("div");
+  preview.className = "upload-viewer-preview";
+  container.appendChild(preview);
+
+  function renderPreview() {
+    const embedUrl = driveFolderEmbedUrl(item.photoUpload.driveFolderUrl);
+    preview.innerHTML = embedUrl
+      ? '<iframe src="' + embedUrl + '" loading="lazy" title="업로드된 사진 폴더 미리보기"></iframe>'
+      : '<div class="upload-viewer-note">드라이브 폴더 링크를 넣으면 여기서 업로드된 사진을 바로 확인할 수 있어요.</div>';
   }
-
-  const refreshBtn = document.createElement("button");
-  refreshBtn.type = "button";
-  refreshBtn.className = "upload-viewer-refresh";
-  refreshBtn.textContent = "🔄 업로드된 사진 확인";
-
-  const grid = document.createElement("div");
-  grid.className = "upload-viewer-grid";
-
-  refreshBtn.addEventListener("click", async () => {
-    refreshBtn.disabled = true;
-    refreshBtn.textContent = "불러오는 중...";
-    grid.innerHTML = "";
-    try {
-      const photos = await listSchedulePhotos(state.date, item.id);
-      if (!photos.length) {
-        grid.innerHTML = '<div class="upload-viewer-empty">아직 업로드된 사진이 없습니다.</div>';
-      } else {
-        grid.innerHTML = photos
-          .map(
-            (p) =>
-              '<a href="' + p.url + '" target="_blank" rel="noopener noreferrer">' +
-              '<img src="' + p.url + '" alt="업로드된 사진" loading="lazy" /></a>'
-          )
-          .join("");
-      }
-    } catch (e) {
-      grid.innerHTML = '<div class="upload-viewer-empty">불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
-    } finally {
-      refreshBtn.disabled = false;
-      refreshBtn.textContent = "🔄 업로드된 사진 확인";
-    }
-  });
-
-  container.appendChild(refreshBtn);
-  container.appendChild(grid);
+  renderPreview();
+  container.querySelectorAll("input").forEach((inp) => inp.addEventListener("input", renderPreview));
 }
 
 // ---------------------------------------------------------------
@@ -447,12 +425,12 @@ function renderScheduleList() {
     uploadViewer.className = "upload-viewer";
     uploadViewer.hidden = !item.photoUpload.enabled;
     body.appendChild(uploadViewer);
-    renderUploadViewer(uploadViewer, item, state);
+    renderUploadViewer(uploadViewer, item);
 
     uploadCheckbox.addEventListener("change", () => {
       item.photoUpload.enabled = uploadCheckbox.checked;
       uploadViewer.hidden = !item.photoUpload.enabled;
-      renderUploadViewer(uploadViewer, item, state);
+      renderUploadViewer(uploadViewer, item);
       markDirty();
     });
 
@@ -575,7 +553,11 @@ function buildExportObject() {
         : null,
       freeTimeRecommendation: it.freeTimeRecommendation && it.freeTimeRecommendation.length ? it.freeTimeRecommendation : null,
       photo: it.photo || null,
-      photoUpload: { enabled: !!(it.photoUpload && it.photoUpload.enabled) }
+      photoUpload: {
+        enabled: !!(it.photoUpload && it.photoUpload.enabled),
+        formUrl: (it.photoUpload && it.photoUpload.formUrl) || "",
+        driveFolderUrl: (it.photoUpload && it.photoUpload.driveFolderUrl) || ""
+      }
     })),
     locations: state.locations.map((loc, idx) => ({
       order: idx + 1,
@@ -796,7 +778,7 @@ document.addEventListener("DOMContentLoaded", function () {
     state.schedule.push({
       id: 0, time: "", endTime: "", title: "", location: "", mapUrl: "",
       description: "", travelTimeToNext: "", difficulty: "", distance: "",
-      meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false }
+      meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "" }
     });
     renderScheduleList();
     markDirty();

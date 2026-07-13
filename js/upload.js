@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     card.innerHTML =
       '<div class="section-title">🕒 ' + escapeHtml(item.time) + " · " + escapeHtml(item.title) + "</div>" +
       (item.location ? '<p style="font-size:12.5px; color:var(--color-muted); margin-bottom:10px;">' + escapeHtml(item.location) + "</p>" : "");
-    card.appendChild(buildUploadWidget(item, c.date));
+    card.appendChild(buildUploadCard(item));
     root.appendChild(card);
   });
 });

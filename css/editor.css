@@ -419,39 +419,18 @@ input:focus, textarea:focus, select:focus {
 .upload-viewer { margin-top: 4px; }
 .upload-viewer-note {
   font-size: 12px;
-  color: #92400e;
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  border-radius: var(--radius-sm);
-  padding: 8px 10px;
-}
-.upload-viewer-refresh {
-  border: 1.5px solid var(--color-primary-light);
-  background: var(--color-primary-bg);
-  color: var(--color-primary-dark);
-  font-weight: 700;
-  font-size: 12.5px;
-  padding: 7px 12px;
-  border-radius: 999px;
-}
-.upload-viewer-refresh:disabled { opacity: 0.6; }
-.upload-viewer-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-top: 10px;
-}
-.upload-viewer-grid img {
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-}
-.upload-viewer-empty {
-  grid-column: 1 / -1;
-  font-size: 12px;
   color: var(--color-muted);
+  background: var(--color-bg);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+.upload-viewer-preview { margin-top: 10px; }
+.upload-viewer-preview iframe {
+  width: 100%;
+  height: 240px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
 }
 
 /* ---------------------------------------------------------------

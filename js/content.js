@@ -93,9 +93,12 @@ window.CONTENT = {
   //   meal                 : 식사 관련 정보, 식사가 아니면 null
   //   freeTimeRecommendation : 자유시간 추천 동선 (우선순위 순 배열), 없으면 null
   //   photo                : 이 일정과 관련된 사진 (images 폴더 경로), 없으면 null
-  //   photoUpload          : { enabled: true/false } - true면 참가자가 이 활동 사진을
-  //                           직접 올릴 수 있는 업로드 칸이 생깁니다 (최초 설정 필요,
-  //                           README의 "참가자 사진 업로드 기능 설정하기" 참고)
+  //   photoUpload          : { enabled, formUrl, driveFolderUrl }
+  //                           enabled를 true로 하면 참가자가 이 활동 사진을 올릴 수
+  //                           있는 칸이 생깁니다. formUrl은 파일 업로드 질문이 있는
+  //                           구글폼 링크, driveFolderUrl은 그 폼 응답이 쌓이는
+  //                           구글 드라이브 폴더 링크입니다 (최초 설정 필요, README의
+  //                           "참가자 사진 업로드 기능 설정하기" 참고)
   // ---------------------------------------------------------------
   schedule: [
     {
@@ -112,7 +115,7 @@ window.CONTENT = {
       meal: null,
       freeTimeRecommendation: null,
       photo: null,
-      photoUpload: { enabled: false } // true로 바꾸면 참가자가 이 활동 사진을 직접 업로드할 수 있는 칸이 생깁니다 (사진 업로드 기능 최초 설정 필요, README 참고)
+      photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "" } // 켜려면 enabled를 true로, formUrl/driveFolderUrl은 README 참고
     },
     {
       id: 2,
@@ -128,7 +131,11 @@ window.CONTENT = {
       meal: null,
       freeTimeRecommendation: null,
       photo: null,
-      photoUpload: { enabled: true } // 예시: 이 활동은 참가자가 사진을 직접 올릴 수 있도록 켜둔 상태입니다
+      photoUpload: {
+        enabled: true, // 예시: 이 활동은 참가자가 사진을 직접 올릴 수 있도록 켜둔 상태입니다
+        formUrl: "", // 예: "https://forms.gle/xxxxxxxx" (파일 업로드 질문이 있는 구글폼 링크)
+        driveFolderUrl: "" // 예: "https://drive.google.com/drive/folders/xxxxxxxx" (그 폼의 응답 파일이 쌓이는 드라이브 폴더 링크)
+      }
     },
     {
       id: 3,
@@ -148,7 +155,7 @@ window.CONTENT = {
         "3순위: 인근 카페에서 휴식 (도보 3분 거리)"
       ],
       photo: null,
-      photoUpload: { enabled: false } // true로 바꾸면 참가자가 이 활동 사진을 직접 업로드할 수 있는 칸이 생깁니다 (사진 업로드 기능 최초 설정 필요, README 참고)
+      photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "" } // 켜려면 enabled를 true로, formUrl/driveFolderUrl은 README 참고
     },
     {
       id: 4,
@@ -168,7 +175,7 @@ window.CONTENT = {
       },
       freeTimeRecommendation: null,
       photo: null,
-      photoUpload: { enabled: false } // true로 바꾸면 참가자가 이 활동 사진을 직접 업로드할 수 있는 칸이 생깁니다 (사진 업로드 기능 최초 설정 필요, README 참고)
+      photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "" } // 켜려면 enabled를 true로, formUrl/driveFolderUrl은 README 참고
     },
     {
       id: 5,
@@ -184,7 +191,7 @@ window.CONTENT = {
       meal: null,
       freeTimeRecommendation: null,
       photo: null,
-      photoUpload: { enabled: false } // true로 바꾸면 참가자가 이 활동 사진을 직접 업로드할 수 있는 칸이 생깁니다 (사진 업로드 기능 최초 설정 필요, README 참고)
+      photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "" } // 켜려면 enabled를 true로, formUrl/driveFolderUrl은 README 참고
     }
   ],
 
