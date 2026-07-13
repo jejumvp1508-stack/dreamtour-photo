@@ -419,6 +419,20 @@ main {
   margin-bottom: 10px;
 }
 
+/* 일정 상세에서 사진업로드 페이지로 안내하는 짧은 버튼 */
+.upload-prompt {
+  display: block;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: var(--color-primary-bg);
+  border: 1px dashed var(--color-primary-light);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+}
+
 /* 참가자 사진 업로드 위젯 */
 .upload-widget {
   margin-top: 12px;

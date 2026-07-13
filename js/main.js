@@ -92,13 +92,17 @@ function renderLayout(activePage) {
   // --- 4) 하단 탭 네비게이션 ---
   const nav = document.createElement("nav");
   nav.id = "bottom-nav";
+  // "사진업로드" 탭은 업로드를 받는 활동이 하나라도 있을 때만 보여줍니다.
+  const hasUploadItems = !!(c.schedule && c.schedule.some((s) => s.photoUpload && s.photoUpload.enabled));
+
   const tabs = [
     { key: "home", href: "index.html", icon: "🏠", label: "홈" },
     { key: "schedule", href: "schedule.html", icon: "🗓️", label: "일정" },
+    { key: "upload", href: "upload.html", icon: "📸", label: "사진업로드", show: hasUploadItems },
     { key: "location", href: "location.html", icon: "🗺️", label: "오시는길" },
     { key: "faq", href: "faq.html", icon: "❓", label: "FAQ", sectionKey: "faq" },
     { key: "survey", href: "survey.html", icon: "📝", label: "설문", sectionKey: "survey" }
-  ].filter((t) => !t.sectionKey || (c.sectionsEnabled && c.sectionsEnabled[t.sectionKey]) !== false);
+  ].filter((t) => t.show !== false && (!t.sectionKey || (c.sectionsEnabled && c.sectionsEnabled[t.sectionKey]) !== false));
   nav.innerHTML = tabs
     .map(
       (t) =>

@@ -28,8 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
     "</div>";
 
   // ---------------- 빠른 메뉴 ----------------
+  const hasUploadItems = !!(c.schedule && c.schedule.some((s) => s.photoUpload && s.photoUpload.enabled));
   const quickMenuItems = [
     '<a href="schedule.html"><span class="icon">🗓️</span>일정</a>',
+    hasUploadItems ? '<a href="upload.html"><span class="icon">📸</span>사진업로드</a>' : "",
     '<a href="location.html"><span class="icon">🗺️</span>오시는길</a>',
     sectionOn("faq") ? '<a href="faq.html"><span class="icon">❓</span>FAQ</a>' : "",
     sectionOn("survey") ? '<a href="survey.html"><span class="icon">📝</span>설문조사</a>' : ""

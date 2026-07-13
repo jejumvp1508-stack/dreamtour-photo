@@ -79,3 +79,74 @@ async function listSchedulePhotos(eventDate, scheduleId) {
   // 최신 업로드가 먼저 보이도록 (파일명 앞부분이 업로드 시각이라 이름 역순 정렬)
   return items.sort((a, b) => (a.name < b.name ? 1 : -1));
 }
+
+// 사진 업로드가 켜진 일정이 하나라도 있는지 확인 (하단 메뉴에 "사진업로드" 탭을 보여줄지 결정할 때 씁니다)
+function hasAnyUploadSection(schedule) {
+  return !!(schedule && schedule.some((item) => item.photoUpload && item.photoUpload.enabled));
+}
+
+// ---------------------------------------------------------------
+// 실제 업로드 UI(이름 입력 + 파일 선택 + 진행률 + 갤러리)를 만듭니다.
+// schedule.html의 사진업로드 페이지(upload.js)에서 사용합니다.
+// ---------------------------------------------------------------
+function buildUploadWidget(item, eventDate) {
+  const wrap = document.createElement("div");
+  wrap.className = "upload-widget";
+
+  if (!isUploadConfigured()) {
+    wrap.innerHTML = '<div class="upload-disabled-note">📸 사진 업로드 기능이 아직 준비 중입니다. 잠시 후 다시 확인해주세요.</div>';
+    return wrap;
+  }
+
+  wrap.innerHTML =
+    '<input type="text" class="upload-name" placeholder="이름 또는 팀명 (선택)" />' +
+    '<div class="upload-row">' +
+    '<input type="file" accept="image/*" capture="environment" class="upload-file" hidden />' +
+    '<button type="button" class="upload-pick-btn">사진 선택해서 올리기</button>' +
+    "</div>" +
+    '<div class="upload-status"></div>' +
+    '<div class="upload-gallery"></div>';
+
+  const fileInput = wrap.querySelector(".upload-file");
+  const pickBtn = wrap.querySelector(".upload-pick-btn");
+  const status = wrap.querySelector(".upload-status");
+  const nameInput = wrap.querySelector(".upload-name");
+  const gallery = wrap.querySelector(".upload-gallery");
+
+  async function loadGallery() {
+    gallery.innerHTML = '<div class="upload-gallery-empty">사진을 불러오는 중...</div>';
+    try {
+      const photos = await listSchedulePhotos(eventDate, item.id);
+      if (!photos.length) {
+        gallery.innerHTML = '<div class="upload-gallery-empty">아직 업로드된 사진이 없어요. 첫 번째로 올려보세요!</div>';
+        return;
+      }
+      gallery.innerHTML = photos.map((p) => '<img src="' + p.url + '" alt="참가자가 올린 사진" loading="lazy" />').join("");
+    } catch (e) {
+      gallery.innerHTML = "";
+    }
+  }
+
+  pickBtn.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    pickBtn.disabled = true;
+    status.textContent = "업로드 중... 0%";
+    try {
+      await uploadSchedulePhoto(eventDate, item.id, file, nameInput.value.trim(), (pct) => {
+        status.textContent = "업로드 중... " + pct + "%";
+      });
+      status.textContent = "✅ 업로드 완료! 감사합니다.";
+      fileInput.value = "";
+      loadGallery();
+    } catch (e) {
+      status.textContent = "⚠️ 업로드에 실패했어요. 다시 시도해주세요.";
+    } finally {
+      pickBtn.disabled = false;
+    }
+  });
+
+  loadGallery();
+  return wrap;
+}
