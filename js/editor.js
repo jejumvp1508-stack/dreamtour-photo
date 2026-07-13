@@ -192,6 +192,106 @@ function fieldTextareaList(labelText, item, key) {
 }
 
 // ---------------------------------------------------------------
+// 사진 선택기 (컴퓨터에서 사진 선택 → 미리보기 → 가능하면 images 폴더에 자동 저장)
+// ---------------------------------------------------------------
+// 브라우저가 폴더에 직접 파일을 써주는 기능(File System Access API)을 지원하는지 여부.
+// 크롬/엣지 데스크톱에서 http(s):// 또는 http://localhost 로 열었을 때만 지원됩니다.
+// (파일을 더블클릭해서 file:// 로 열었거나 사파리/파이어폭스라면 지원되지 않습니다)
+function supportsFolderSave() {
+  return typeof window.showDirectoryPicker === "function";
+}
+
+let imagesDirHandle = null;
+
+async function connectImagesFolder() {
+  try {
+    imagesDirHandle = await window.showDirectoryPicker({ id: "dreamtour-images", mode: "readwrite" });
+    const statusEl = document.getElementById("folder-connect-status");
+    if (statusEl) {
+      statusEl.textContent = "✅ \"" + imagesDirHandle.name + "\" 폴더에 연결됨 — 이제 사진을 선택하면 자동 저장돼요";
+      statusEl.className = "photo-status ok";
+    }
+  } catch (e) {
+    // 사용자가 폴더 선택 대화상자를 취소한 경우 등 — 별도 처리 없이 무시합니다.
+  }
+}
+
+function sanitizeFileName(name) {
+  return name.replace(/\s+/g, "-");
+}
+
+async function saveFileToImagesFolder(file, fileName) {
+  const fileHandle = await imagesDirHandle.getFileHandle(fileName, { create: true });
+  const writable = await fileHandle.createWritable();
+  await writable.write(file);
+  await writable.close();
+}
+
+// pathInput(예: "대표 사진 경로" 입력칸) 바로 뒤에 [사진 선택] 버튼 + 미리보기 + 안내문구를 붙여줍니다.
+// opts.prefix: 자동으로 채울 파일명 앞에 붙일 접두어 (예: 스태프 사진은 "staff-")
+function attachPhotoPicker(pathInput, opts) {
+  if (!pathInput) return;
+  opts = opts || {};
+
+  const wrap = document.createElement("div");
+  wrap.className = "photo-picker";
+
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+  fileInput.hidden = true;
+
+  const pickBtn = document.createElement("button");
+  pickBtn.type = "button";
+  pickBtn.className = "photo-pick-btn";
+  pickBtn.textContent = "🖼️ 컴퓨터에서 사진 선택";
+  pickBtn.addEventListener("click", () => fileInput.click());
+
+  const thumb = document.createElement("img");
+  thumb.className = "photo-thumb";
+  thumb.hidden = true;
+  thumb.alt = "선택한 사진 미리보기";
+
+  const status = document.createElement("span");
+  status.className = "photo-status";
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    thumb.src = URL.createObjectURL(file);
+    thumb.hidden = false;
+
+    const fileName = (opts.prefix || "") + sanitizeFileName(file.name);
+    pathInput.value = "images/" + fileName;
+    pathInput.dispatchEvent(new Event("input", { bubbles: true }));
+
+    if (imagesDirHandle) {
+      try {
+        await saveFileToImagesFolder(file, fileName);
+        status.textContent = "✅ images 폴더에 자동 저장됨";
+        status.className = "photo-status ok";
+      } catch (e) {
+        status.textContent = "⚠️ 자동 저장에 실패했어요. 이 사진을 직접 images 폴더에 복사해주세요.";
+        status.className = "photo-status warn";
+      }
+    } else if (supportsFolderSave()) {
+      status.textContent = "위 'images 폴더 연결하기' 버튼을 누르면 다음부터 자동 저장돼요";
+      status.className = "photo-status hint";
+    } else {
+      status.textContent = "⚠️ 이 브라우저는 자동 저장을 지원하지 않아요. 이 사진을 직접 images 폴더에 복사해주세요.";
+      status.className = "photo-status warn";
+    }
+  });
+
+  wrap.appendChild(pickBtn);
+  wrap.appendChild(fileInput);
+  wrap.appendChild(thumb);
+  wrap.appendChild(status);
+  pathInput.insertAdjacentElement("afterend", wrap);
+}
+
+// ---------------------------------------------------------------
 // ⑤ 스태프 목록
 // ---------------------------------------------------------------
 function renderStaffList() {
@@ -202,12 +302,14 @@ function renderStaffList() {
       "스태프 " + (idx + 1) + (item.name ? " · " + item.name : ""),
       item, state.staff, renderStaffList
     );
+    const photoLabel = fieldInput("사진 경로", item, "photo", { placeholder: "images/staff-1.jpg" });
     body.appendChild(fieldGrid(
       fieldInput("이름", item, "name"),
       fieldInput("역할", item, "role"),
       fieldInput("전화번호", item, "phone", { placeholder: "010-0000-0000" }),
-      fieldInput("사진 경로", item, "photo", { placeholder: "images/staff-1.jpg" })
+      photoLabel
     ));
+    attachPhotoPicker(photoLabel.querySelector("input"), { prefix: "staff-" + (idx + 1) + "-" });
     container.appendChild(row);
   });
   setCount("count-staff", state.staff.length);
@@ -590,6 +692,23 @@ document.addEventListener("DOMContentLoaded", function () {
       out.hidden = true;
     }
   });
+
+  attachPhotoPicker(document.getElementById("f-heroImage"));
+
+  const connectBtn = document.getElementById("btn-connect-folder");
+  const connectStatus = document.getElementById("folder-connect-status");
+  if (connectBtn) {
+    if (supportsFolderSave()) {
+      connectBtn.addEventListener("click", connectImagesFolder);
+    } else {
+      connectBtn.disabled = true;
+      connectBtn.title = "이 브라우저(또는 file://로 연 페이지)에서는 지원되지 않아요. Chrome/Edge에서 로컬 서버로 열어주세요.";
+      if (connectStatus) {
+        connectStatus.textContent = "이 브라우저는 자동 저장을 지원하지 않아요 — 사진 선택 후 직접 images 폴더에 복사해주세요.";
+        connectStatus.className = "photo-status warn";
+      }
+    }
+  }
 
   initWizardNav();
   syncHeaderHeight();
