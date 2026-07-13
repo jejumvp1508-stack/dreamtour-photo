@@ -1,0 +1,597 @@
+/*
+  =====================================================================
+   콘텐츠 편집기 로직 (editor.js)
+  =====================================================================
+  ✅ 이 파일은 editor.html의 폼을 동작시키는 코드입니다. 운영팀은 이 파일을
+     건드릴 필요가 없습니다 — editor.html 화면에서 값만 입력하면 됩니다.
+  ✅ 동작 방식:
+     1) 페이지가 열리면 이미 로드된 js/content.js(window.CONTENT)의 값을
+        폼에 채워 넣습니다.
+     2) 폼을 수정하면 메모리상의 state 객체가 함께 바뀝니다.
+     3) "content.js 파일 저장" 버튼을 누르면 state를 새 content.js 텍스트로
+        만들어 다운로드합니다. (서버 없이 브라우저에서만 동작)
+  =====================================================================
+*/
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+// window.CONTENT에 없는 값이 있어도 편집기가 깨지지 않도록 기본값을 채워줍니다.
+function withDefaults(src) {
+  src = src || {};
+  return {
+    eventName: src.eventName || "",
+    eventSubtitle: src.eventSubtitle || "",
+    date: src.date || "",
+    dateDisplay: src.dateDisplay || "",
+    heroImage: src.heroImage || "",
+    heroTagline: src.heroTagline || "",
+    notice: Object.assign({ active: false, text: "" }, src.notice || {}),
+    rainPlan: Object.assign(
+      { hasIndoorAlternative: false, description: "", decisionTime: "" },
+      src.rainPlan || {}
+    ),
+    contact: Object.assign({ name: "", role: "", phone: "" }, src.contact || {}),
+    staff: src.staff ? deepClone(src.staff) : [],
+    meetingSummary: Object.assign({ time: "", location: "", mapUrl: "" }, src.meetingSummary || {}),
+    schedule: src.schedule ? deepClone(src.schedule) : [],
+    locations: src.locations ? deepClone(src.locations) : [],
+    mapEmbedQuery: src.mapEmbedQuery || "",
+    checklist: src.checklist ? deepClone(src.checklist) : [],
+    faq: src.faq ? deepClone(src.faq) : [],
+    survey: Object.assign({ url: "", duration: "" }, src.survey || {})
+  };
+}
+
+const state = withDefaults(window.CONTENT);
+let dirty = false;
+function markDirty() { dirty = true; }
+
+window.addEventListener("beforeunload", function (e) {
+  if (dirty) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+
+// ---------------------------------------------------------------
+// 단일 값 입력칸을 state와 연결하는 공통 함수
+// ---------------------------------------------------------------
+function bindInput(id, obj, key) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.type === "checkbox") {
+    el.checked = !!obj[key];
+    const handler = () => { obj[key] = el.checked; markDirty(); };
+    el.addEventListener("change", handler);
+  } else {
+    el.value = obj[key] || "";
+    el.addEventListener("input", () => { obj[key] = el.value; markDirty(); });
+  }
+}
+
+// ---------------------------------------------------------------
+// 반복 목록(스태프/일정/장소/FAQ) 카드를 만드는 공통 도우미들
+// ---------------------------------------------------------------
+function moveInArray(arr, item, dir) {
+  const i = arr.indexOf(item);
+  const j = i + dir;
+  if (j < 0 || j >= arr.length) return;
+  const tmp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = tmp;
+}
+
+function moveIndex(arr, idx, dir) {
+  const j = idx + dir;
+  if (j < 0 || j >= arr.length) return;
+  const tmp = arr[idx];
+  arr[idx] = arr[j];
+  arr[j] = tmp;
+}
+
+function setCount(id, n) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = n + "개";
+}
+
+function smallBtn(text, onClick, danger) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = text;
+  if (danger) b.classList.add("danger");
+  b.addEventListener("click", onClick);
+  return b;
+}
+
+function createRowShell(titleText, item, arr, rerender) {
+  const row = document.createElement("div");
+  row.className = "edit-row";
+  const header = document.createElement("div");
+  header.className = "edit-row-header";
+  const titleSpan = document.createElement("span");
+  titleSpan.textContent = titleText;
+  const actions = document.createElement("div");
+  actions.className = "edit-row-actions";
+  actions.appendChild(smallBtn("↑", () => { moveInArray(arr, item, -1); rerender(); markDirty(); }));
+  actions.appendChild(smallBtn("↓", () => { moveInArray(arr, item, 1); rerender(); markDirty(); }));
+  actions.appendChild(smallBtn("삭제", () => { arr.splice(arr.indexOf(item), 1); rerender(); markDirty(); }, true));
+  header.appendChild(titleSpan);
+  header.appendChild(actions);
+  const body = document.createElement("div");
+  row.appendChild(header);
+  row.appendChild(body);
+  return { row, body };
+}
+
+function fieldGrid(...labels) {
+  const div = document.createElement("div");
+  div.className = "field-grid";
+  labels.forEach((l) => div.appendChild(l));
+  return div;
+}
+
+function fieldInput(labelText, item, key, opts) {
+  opts = opts || {};
+  const label = document.createElement("label");
+  if (opts.span2) label.classList.add("span-2");
+  label.appendChild(document.createTextNode(labelText));
+  const input = document.createElement(opts.textarea ? "textarea" : "input");
+  if (!opts.textarea) input.type = opts.type || "text";
+  if (opts.rows) input.rows = opts.rows;
+  if (opts.placeholder) input.placeholder = opts.placeholder;
+  input.value = item[key] || "";
+  input.addEventListener("input", () => { item[key] = input.value; markDirty(); });
+  label.appendChild(input);
+  return label;
+}
+
+function fieldSelect(labelText, item, key, options) {
+  const label = document.createElement("label");
+  label.appendChild(document.createTextNode(labelText));
+  const select = document.createElement("select");
+  options.forEach((opt) => {
+    const o = document.createElement("option");
+    o.value = opt.value;
+    o.textContent = opt.label;
+    if ((item[key] || "") === opt.value) o.selected = true;
+    select.appendChild(o);
+  });
+  select.addEventListener("input", () => { item[key] = select.value; markDirty(); });
+  label.appendChild(select);
+  return label;
+}
+
+function fieldCheckbox(labelText, obj, key) {
+  const wrap = document.createElement("label");
+  wrap.className = "checkbox-line";
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.checked = !!obj[key];
+  input.addEventListener("change", () => { obj[key] = input.checked; markDirty(); });
+  wrap.appendChild(input);
+  wrap.appendChild(document.createTextNode(labelText));
+  return wrap;
+}
+
+function fieldTextareaList(labelText, item, key) {
+  const label = document.createElement("label");
+  label.classList.add("span-2");
+  label.appendChild(document.createTextNode(labelText));
+  const ta = document.createElement("textarea");
+  ta.rows = 3;
+  ta.placeholder = "1순위: ...\n2순위: ...";
+  ta.value = (item[key] || []).join("\n");
+  ta.addEventListener("input", () => {
+    item[key] = ta.value.split("\n").map((s) => s.trim()).filter(Boolean);
+    markDirty();
+  });
+  label.appendChild(ta);
+  return label;
+}
+
+// ---------------------------------------------------------------
+// ⑤ 스태프 목록
+// ---------------------------------------------------------------
+function renderStaffList() {
+  const container = document.getElementById("staff-list");
+  container.innerHTML = "";
+  state.staff.forEach((item, idx) => {
+    const { row, body } = createRowShell(
+      "스태프 " + (idx + 1) + (item.name ? " · " + item.name : ""),
+      item, state.staff, renderStaffList
+    );
+    body.appendChild(fieldGrid(
+      fieldInput("이름", item, "name"),
+      fieldInput("역할", item, "role"),
+      fieldInput("전화번호", item, "phone", { placeholder: "010-0000-0000" }),
+      fieldInput("사진 경로", item, "photo", { placeholder: "images/staff-1.jpg" })
+    ));
+    container.appendChild(row);
+  });
+  setCount("count-staff", state.staff.length);
+}
+
+// ---------------------------------------------------------------
+// ⑦ 시간별 일정
+// ---------------------------------------------------------------
+function renderScheduleList() {
+  const container = document.getElementById("schedule-list");
+  container.innerHTML = "";
+  state.schedule.forEach((item, idx) => {
+    const { row, body } = createRowShell(
+      (idx + 1) + ". " + (item.time || "--:--") + " " + (item.title || "(제목 없음)"),
+      item, state.schedule, renderScheduleList
+    );
+
+    body.appendChild(fieldGrid(
+      fieldInput("시작 시각", item, "time", { placeholder: "13:00" }),
+      fieldInput("종료 시각 (선택)", item, "endTime", { placeholder: "13:20" }),
+      fieldInput("일정 제목", item, "title", { span2: true }),
+      fieldInput("장소명", item, "location", { span2: true }),
+      fieldInput("구글맵 링크", item, "mapUrl", { span2: true, placeholder: "https://maps.google.com/?q=..." }),
+      fieldInput("상세 설명 (펼쳤을 때 보이는 내용)", item, "description", { textarea: true, rows: 2, span2: true }),
+      fieldInput("다음 장소까지 이동시간 (선택)", item, "travelTimeToNext", { placeholder: "버스 이동 약 15분" }),
+      fieldSelect("난이도 (도보 프로그램만)", item, "difficulty", [
+        { value: "", label: "해당 없음" },
+        { value: "쉬움", label: "쉬움" },
+        { value: "보통", label: "보통" },
+        { value: "약간 힘듦", label: "약간 힘듦" }
+      ]),
+      fieldInput("총 도보 거리 (선택)", item, "distance", { placeholder: "총 도보 2.3km" })
+    ));
+
+    // 식사 정보 (알레르기/채식) 토글 블록
+    const mealToggle = document.createElement("label");
+    mealToggle.className = "checkbox-line";
+    const mealCheckbox = document.createElement("input");
+    mealCheckbox.type = "checkbox";
+    mealCheckbox.checked = !!item.meal;
+    mealToggle.appendChild(mealCheckbox);
+    mealToggle.appendChild(document.createTextNode("이 항목은 식사 일정입니다 (알레르기/채식 정보 표시)"));
+    body.appendChild(mealToggle);
+
+    const mealBlock = document.createElement("div");
+    mealBlock.className = "meal-block";
+    mealBlock.hidden = !item.meal;
+    function renderMealBlock() {
+      mealBlock.innerHTML = "";
+      if (!item.meal) return;
+      mealBlock.appendChild(fieldCheckbox("알레르기 주의 안내 표시", item.meal, "hasAllergyInfo"));
+      mealBlock.appendChild(fieldInput("알레르기 안내 문구", item.meal, "allergyNote", { textarea: true, rows: 2 }));
+      mealBlock.appendChild(fieldInput("채식 옵션 안내 (없으면 빈칸)", item.meal, "vegetarianOption"));
+    }
+    renderMealBlock();
+    mealCheckbox.addEventListener("change", () => {
+      item.meal = mealCheckbox.checked
+        ? (item.meal || { hasAllergyInfo: true, allergyNote: "", vegetarianOption: "" })
+        : null;
+      mealBlock.hidden = !item.meal;
+      renderMealBlock();
+      markDirty();
+    });
+    body.appendChild(mealBlock);
+
+    body.appendChild(fieldTextareaList("자유시간 추천 동선 (한 줄에 하나씩, 없으면 빈칸)", item, "freeTimeRecommendation"));
+
+    container.appendChild(row);
+  });
+  setCount("count-schedule", state.schedule.length);
+}
+
+// ---------------------------------------------------------------
+// ⑧ 오시는 길 장소 목록
+// ---------------------------------------------------------------
+function renderLocationsList() {
+  const container = document.getElementById("locations-list");
+  container.innerHTML = "";
+  state.locations.forEach((item, idx) => {
+    const { row, body } = createRowShell(
+      (idx + 1) + ". " + (item.name || "(이름 없음)"),
+      item, state.locations, renderLocationsList
+    );
+    body.appendChild(fieldGrid(
+      fieldInput("장소명", item, "name", { span2: true }),
+      fieldInput("설명", item, "description", { span2: true }),
+      fieldInput("주소", item, "address", { span2: true }),
+      fieldInput("구글맵 링크", item, "mapUrl", { span2: true, placeholder: "https://maps.google.com/?q=..." })
+    ));
+    container.appendChild(row);
+  });
+  setCount("count-locations", state.locations.length);
+}
+
+// ---------------------------------------------------------------
+// ⑨ 준비물 체크리스트 (문자열 배열)
+// ---------------------------------------------------------------
+function renderChecklistList() {
+  const container = document.getElementById("checklist-list");
+  container.innerHTML = "";
+  state.checklist.forEach((val, idx) => {
+    const row = document.createElement("div");
+    row.className = "simple-row";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = val;
+    input.addEventListener("input", () => { state.checklist[idx] = input.value; markDirty(); });
+    row.appendChild(input);
+    row.appendChild(smallBtn("↑", () => { moveIndex(state.checklist, idx, -1); renderChecklistList(); markDirty(); }));
+    row.appendChild(smallBtn("↓", () => { moveIndex(state.checklist, idx, 1); renderChecklistList(); markDirty(); }));
+    row.appendChild(smallBtn("삭제", () => { state.checklist.splice(idx, 1); renderChecklistList(); markDirty(); }, true));
+    container.appendChild(row);
+  });
+  setCount("count-checklist", state.checklist.length);
+}
+
+// ---------------------------------------------------------------
+// ⑩ FAQ
+// ---------------------------------------------------------------
+function renderFaqList() {
+  const container = document.getElementById("faq-list");
+  container.innerHTML = "";
+  state.faq.forEach((item, idx) => {
+    const { row, body } = createRowShell(
+      "Q" + (idx + 1) + ". " + (item.q || "(질문 없음)"),
+      item, state.faq, renderFaqList
+    );
+    body.appendChild(fieldInput("질문", item, "q", { span2: true }));
+    body.appendChild(fieldInput("답변", item, "a", { textarea: true, rows: 2, span2: true }));
+    container.appendChild(row);
+  });
+  setCount("count-faq", state.faq.length);
+}
+
+// ---------------------------------------------------------------
+// content.js 파일 텍스트 생성 + 다운로드
+// ---------------------------------------------------------------
+function buildExportObject() {
+  return {
+    eventName: state.eventName,
+    eventSubtitle: state.eventSubtitle,
+    date: state.date,
+    dateDisplay: state.dateDisplay,
+    heroImage: state.heroImage,
+    heroTagline: state.heroTagline,
+    notice: { active: !!state.notice.active, text: state.notice.text },
+    rainPlan: {
+      hasIndoorAlternative: !!state.rainPlan.hasIndoorAlternative,
+      description: state.rainPlan.description,
+      decisionTime: state.rainPlan.decisionTime
+    },
+    contact: { name: state.contact.name, role: state.contact.role, phone: state.contact.phone },
+    staff: state.staff.map((s) => ({ name: s.name || "", role: s.role || "", phone: s.phone || "", photo: s.photo || "" })),
+    meetingSummary: {
+      time: state.meetingSummary.time,
+      location: state.meetingSummary.location,
+      mapUrl: state.meetingSummary.mapUrl
+    },
+    schedule: state.schedule.map((it, idx) => ({
+      id: idx + 1,
+      time: it.time || "",
+      endTime: it.endTime || null,
+      title: it.title || "",
+      location: it.location || "",
+      mapUrl: it.mapUrl || "",
+      description: it.description || "",
+      travelTimeToNext: it.travelTimeToNext || null,
+      difficulty: it.difficulty || null,
+      distance: it.distance || null,
+      meal: it.meal
+        ? {
+            hasAllergyInfo: !!it.meal.hasAllergyInfo,
+            allergyNote: it.meal.allergyNote || "",
+            vegetarianOption: it.meal.vegetarianOption || ""
+          }
+        : null,
+      freeTimeRecommendation: it.freeTimeRecommendation && it.freeTimeRecommendation.length ? it.freeTimeRecommendation : null
+    })),
+    locations: state.locations.map((loc, idx) => ({
+      order: idx + 1,
+      name: loc.name || "",
+      description: loc.description || "",
+      address: loc.address || "",
+      mapUrl: loc.mapUrl || ""
+    })),
+    mapEmbedQuery: state.mapEmbedQuery,
+    checklist: state.checklist.filter((s) => s && s.trim()),
+    faq: state.faq.map((f) => ({ q: f.q || "", a: f.a || "" })),
+    survey: { url: state.survey.url, duration: state.survey.duration }
+  };
+}
+
+function generateFileText() {
+  const json = JSON.stringify(buildExportObject(), null, 2);
+  return (
+    "/*\n" +
+    "  =====================================================================\n" +
+    "   [운영팀 전용] 행사 콘텐츠 데이터 파일\n" +
+    "  =====================================================================\n" +
+    "  이 파일은 editor.html(콘텐츠 편집기)에서 자동으로 생성되었습니다.\n" +
+    "  editor.html을 열어 다시 수정하거나, 이 파일을 텍스트 편집기로 직접 열어\n" +
+    "  큰따옴표 안의 값을 고쳐도 됩니다.\n" +
+    "  =====================================================================\n" +
+    "*/\n\n" +
+    "window.CONTENT = " + json + ";\n"
+  );
+}
+
+// 헤더 실제 높이를 측정해서 사이드 메뉴가 헤더 뒤에 가려지지 않도록 맞춥니다.
+// (글자 줄바꿈 등으로 헤더 높이가 화면 크기별로 달라질 수 있어 고정값 대신 매번 측정합니다)
+function syncHeaderHeight() {
+  const header = document.querySelector(".editor-header");
+  if (!header) return;
+  document.documentElement.style.setProperty("--editor-header-h", header.offsetHeight + "px");
+}
+
+function doDownload() {
+  const text = generateFileText();
+  const blob = new Blob([text], { type: "application/javascript" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "content.js";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  dirty = false;
+
+  const floatBtn = document.getElementById("floating-save");
+  if (floatBtn) {
+    floatBtn.textContent = "✅";
+    floatBtn.classList.add("saved");
+    setTimeout(() => {
+      floatBtn.textContent = "💾";
+      floatBtn.classList.remove("saved");
+    }, 1500);
+  }
+}
+
+// ---------------------------------------------------------------
+// 좌측(모바일: 상단) 메뉴 + 패널 전환 + 이전/다음 내비게이션
+// 패널 HTML에 있는 data-icon / data-label을 읽어서 메뉴를 자동으로 만듭니다.
+// ---------------------------------------------------------------
+function initWizardNav() {
+  const panels = Array.from(document.querySelectorAll(".editor-panel"));
+  const nav = document.getElementById("editor-nav");
+  const footerNav = document.getElementById("panel-footer-nav");
+  const progressFill = document.getElementById("progress-fill");
+  const visited = new Set();
+
+  panels.forEach((panel) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-item";
+    btn.dataset.target = panel.id;
+    btn.innerHTML =
+      '<span class="nav-icon">' + panel.dataset.icon + "</span>" +
+      '<span class="nav-label">' + panel.dataset.label + "</span>";
+    btn.addEventListener("click", () => showPanel(panel.id));
+    nav.appendChild(btn);
+  });
+
+  function showPanel(id) {
+    const idx = panels.findIndex((p) => p.id === id);
+    if (idx === -1) return;
+    visited.add(id);
+
+    panels.forEach((p) => { p.hidden = p.id !== id; });
+    Array.from(nav.children).forEach((btn) => {
+      const isActive = btn.dataset.target === id;
+      btn.classList.toggle("active", isActive);
+      btn.classList.toggle("visited", visited.has(btn.dataset.target) && !isActive);
+      if (isActive) btn.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+    });
+
+    progressFill.style.width = Math.round(((idx + 1) / panels.length) * 100) + "%";
+
+    footerNav.innerHTML = "";
+    if (idx > 0) {
+      const prevBtn = document.createElement("button");
+      prevBtn.type = "button";
+      prevBtn.textContent = "← 이전";
+      prevBtn.addEventListener("click", () => showPanel(panels[idx - 1].id));
+      footerNav.appendChild(prevBtn);
+    } else {
+      footerNav.appendChild(document.createElement("span"));
+    }
+    footerNav.appendChild(Object.assign(document.createElement("div"), { className: "spacer" }));
+    if (idx < panels.length - 1) {
+      const nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.className = "primary-next";
+      nextBtn.textContent = "다음 →";
+      nextBtn.addEventListener("click", () => showPanel(panels[idx + 1].id));
+      footerNav.appendChild(nextBtn);
+    }
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  showPanel(panels[0].id);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  bindInput("f-eventName", state, "eventName");
+  bindInput("f-eventSubtitle", state, "eventSubtitle");
+  bindInput("f-date", state, "date");
+  bindInput("f-dateDisplay", state, "dateDisplay");
+  bindInput("f-heroImage", state, "heroImage");
+  bindInput("f-heroTagline", state, "heroTagline");
+
+  bindInput("f-notice-active", state.notice, "active");
+  bindInput("f-notice-text", state.notice, "text");
+
+  bindInput("f-rain-hasIndoor", state.rainPlan, "hasIndoorAlternative");
+  bindInput("f-rain-desc", state.rainPlan, "description");
+  bindInput("f-rain-decision", state.rainPlan, "decisionTime");
+
+  bindInput("f-contact-name", state.contact, "name");
+  bindInput("f-contact-role", state.contact, "role");
+  bindInput("f-contact-phone", state.contact, "phone");
+
+  bindInput("f-meet-time", state.meetingSummary, "time");
+  bindInput("f-meet-location", state.meetingSummary, "location");
+  bindInput("f-meet-mapUrl", state.meetingSummary, "mapUrl");
+
+  bindInput("f-mapEmbedQuery", state, "mapEmbedQuery");
+
+  bindInput("f-survey-url", state.survey, "url");
+  bindInput("f-survey-duration", state.survey, "duration");
+
+  renderStaffList();
+  renderScheduleList();
+  renderLocationsList();
+  renderChecklistList();
+  renderFaqList();
+
+  document.getElementById("add-staff").addEventListener("click", () => {
+    state.staff.push({ name: "", role: "", phone: "", photo: "" });
+    renderStaffList();
+    markDirty();
+  });
+  document.getElementById("add-schedule").addEventListener("click", () => {
+    state.schedule.push({
+      id: 0, time: "", endTime: "", title: "", location: "", mapUrl: "",
+      description: "", travelTimeToNext: "", difficulty: "", distance: "",
+      meal: null, freeTimeRecommendation: []
+    });
+    renderScheduleList();
+    markDirty();
+  });
+  document.getElementById("add-location").addEventListener("click", () => {
+    state.locations.push({ name: "", description: "", address: "", mapUrl: "" });
+    renderLocationsList();
+    markDirty();
+  });
+  document.getElementById("add-checklist").addEventListener("click", () => {
+    state.checklist.push("");
+    renderChecklistList();
+    markDirty();
+  });
+  document.getElementById("add-faq").addEventListener("click", () => {
+    state.faq.push({ q: "", a: "" });
+    renderFaqList();
+    markDirty();
+  });
+
+  document.getElementById("btn-download").addEventListener("click", doDownload);
+  document.getElementById("floating-save").addEventListener("click", doDownload);
+
+  document.getElementById("btn-show-code").addEventListener("click", () => {
+    const out = document.getElementById("code-output");
+    if (out.hidden) {
+      out.value = generateFileText();
+      out.hidden = false;
+      out.focus();
+      out.select();
+    } else {
+      out.hidden = true;
+    }
+  });
+
+  initWizardNav();
+  syncHeaderHeight();
+  window.addEventListener("resize", syncHeaderHeight);
+});

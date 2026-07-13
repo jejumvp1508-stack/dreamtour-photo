@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>콘텐츠 편집기 | 드림투어</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/editor.css" />
+</head>
+<body class="editor-body">
+
+  <!--
+    =====================================================================
+     [운영팀 전용] 콘텐츠 편집기
+    =====================================================================
+     - 이 페이지는 참가자에게 공유하는 페이지가 아닙니다. 운영팀 컴퓨터에서만 여세요.
+     - 왼쪽(모바일에서는 상단) 메뉴에서 항목을 골라 값을 입력하세요.
+     - 맨 마지막 "저장하기" 메뉴 또는 우측 하단의 파란 저장 버튼을 누르면
+       새 content.js 파일이 다운로드됩니다.
+     - 다운로드된 파일을 프로젝트의 js/content.js 파일에 덮어쓰기 하면 됩니다.
+     - 그 다음 평소처럼 GitHub에 올리면(push) 실제 사이트에 반영됩니다.
+    =====================================================================
+  -->
+
+  <header class="editor-header">
+    <div class="editor-header-inner">
+      <div class="editor-header-text">
+        <div class="editor-eyebrow">운영팀 전용 도구</div>
+        <div class="editor-title">🛠️ 콘텐츠 편집기</div>
+        <div class="editor-subtitle">행사 정보를 입력하면 사이트에 그대로 반영할 content.js 파일을 만들어드려요</div>
+      </div>
+      <a class="btn btn-outline editor-preview-link" href="index.html" target="_blank" rel="noopener noreferrer">↗ 사이트 미리보기</a>
+    </div>
+    <div class="editor-progress-track">
+      <div class="editor-progress-fill" id="progress-fill"></div>
+    </div>
+  </header>
+
+  <!-- 좌측(모바일: 상단 가로 스크롤) 메뉴는 JS가 각 패널의 data-icon / data-label을 읽어 자동 생성합니다 -->
+  <nav class="editor-sidenav" id="editor-nav" aria-label="편집 항목 메뉴"></nav>
+
+  <main class="editor-main">
+    <div class="editor-container">
+
+      <div class="editor-notice">
+        ℹ️ 이 페이지를 새로고침하거나 닫으면 저장하지 않은 내용은 사라져요.
+        수정이 끝나면 꼭 <b>우측 하단의 저장 버튼</b>을 눌러 파일을 받아주세요.
+      </div>
+
+      <!-- ① 행사 기본 정보 -->
+      <section class="editor-panel" id="panel-basic" data-icon="📋" data-label="행사 기본 정보">
+        <div class="panel-head"><span class="panel-icon">📋</span><h2>행사 기본 정보</h2></div>
+        <div class="field-grid">
+          <label>행사(회차) 이름
+            <input type="text" id="f-eventName" placeholder="예: 2026 드림투어 27회차" />
+          </label>
+          <label>부제목 / 시리즈명
+            <input type="text" id="f-eventSubtitle" placeholder="예: 제주 드림투어" />
+          </label>
+          <label>날짜 (YYYY-MM-DD)
+            <input type="date" id="f-date" />
+          </label>
+          <label>화면에 보여줄 날짜 문구
+            <input type="text" id="f-dateDisplay" placeholder="예: 2026년 7월 15일 (수)" />
+          </label>
+          <label>대표 사진 경로
+            <input type="text" id="f-heroImage" placeholder="images/hero.jpg" />
+          </label>
+          <label>한 줄 소개 (태그라인)
+            <input type="text" id="f-heroTagline" placeholder="예: 제주의 바다와 숲을 함께 걷는 하루" />
+          </label>
+        </div>
+      </section>
+
+      <!-- ② 공지사항 -->
+      <section class="editor-panel" id="panel-notice" data-icon="📢" data-label="공지사항">
+        <div class="panel-head"><span class="panel-icon">📢</span><h2>공지사항 배너</h2></div>
+        <label class="checkbox-line">
+          <input type="checkbox" id="f-notice-active" />
+          공지 배너 표시하기
+        </label>
+        <label>공지 내용
+          <textarea id="f-notice-text" rows="2" placeholder="예: 우천 시 실내 프로그램으로 대체됩니다."></textarea>
+        </label>
+      </section>
+
+      <!-- ③ 우천 시 안내 -->
+      <section class="editor-panel" id="panel-rain" data-icon="☔" data-label="우천 시 안내">
+        <div class="panel-head"><span class="panel-icon">☔</span><h2>우천 시 대응 안내</h2></div>
+        <label class="checkbox-line">
+          <input type="checkbox" id="f-rain-hasIndoor" />
+          실내 대체 프로그램이 있음
+        </label>
+        <label>우천 시 안내 문구
+          <textarea id="f-rain-desc" rows="2"></textarea>
+        </label>
+        <label>진행 여부 결정 시각 안내
+          <input type="text" id="f-rain-decision" placeholder="예: 당일 오전 8시경, 기상 상황에 따라 최종 공지" />
+        </label>
+      </section>
+
+      <!-- ④ 담당자 연락처 -->
+      <section class="editor-panel" id="panel-contact" data-icon="📞" data-label="담당자 연락처">
+        <div class="panel-head"><span class="panel-icon">📞</span><h2>당일 담당자 연락처</h2></div>
+        <p class="editor-hint">헤더와 화면 우측 하단 플로팅 버튼에 항상 노출됩니다.</p>
+        <div class="field-grid">
+          <label>이름 <input type="text" id="f-contact-name" /></label>
+          <label>역할 <input type="text" id="f-contact-role" placeholder="예: 현장 총괄 담당자" /></label>
+          <label>전화번호 <input type="text" id="f-contact-phone" placeholder="010-0000-0000" /></label>
+        </div>
+      </section>
+
+      <!-- ⑤ 스태프 목록 -->
+      <section class="editor-panel" id="panel-staff" data-icon="🙋" data-label="현장 스태프">
+        <div class="panel-head"><span class="panel-icon">🙋</span><h2>현장 스태프</h2><span class="panel-count" id="count-staff"></span></div>
+        <div id="staff-list" class="repeat-list"></div>
+        <button type="button" class="btn-add" id="add-staff">+ 스태프 추가</button>
+      </section>
+
+      <!-- ⑥ 집결 정보 -->
+      <section class="editor-panel" id="panel-meeting" data-icon="📍" data-label="집결 정보">
+        <div class="panel-head"><span class="panel-icon">📍</span><h2>집결 정보 (홈 화면 요약용)</h2></div>
+        <div class="field-grid">
+          <label>집결 시각 <input type="text" id="f-meet-time" placeholder="13:00" /></label>
+          <label>집결 장소 <input type="text" id="f-meet-location" /></label>
+          <label class="span-2">집결지 구글맵 링크
+            <input type="text" id="f-meet-mapUrl" placeholder="https://maps.google.com/?q=..." />
+          </label>
+        </div>
+      </section>
+
+      <!-- ⑦ 시간별 일정 -->
+      <section class="editor-panel" id="panel-schedule" data-icon="🗓️" data-label="시간별 일정">
+        <div class="panel-head"><span class="panel-icon">🗓️</span><h2>시간별 일정 (타임테이블)</h2><span class="panel-count" id="count-schedule"></span></div>
+        <p class="editor-hint">각 카드의 ↑ ↓ 버튼으로 순서를 바꿀 수 있어요.</p>
+        <div id="schedule-list" class="repeat-list"></div>
+        <button type="button" class="btn-add" id="add-schedule">+ 일정 항목 추가</button>
+      </section>
+
+      <!-- ⑧ 오시는 길 장소 목록 -->
+      <section class="editor-panel" id="panel-locations" data-icon="🗺️" data-label="오시는 길">
+        <div class="panel-head"><span class="panel-icon">🗺️</span><h2>오시는 길 / 동선</h2><span class="panel-count" id="count-locations"></span></div>
+        <label>지도 페이지 상단 임베드 지도 검색어
+          <input type="text" id="f-mapEmbedQuery" placeholder="예: 드림타워 지하주차장 (보통 집결지)" />
+        </label>
+        <div id="locations-list" class="repeat-list"></div>
+        <button type="button" class="btn-add" id="add-location">+ 장소 추가</button>
+      </section>
+
+      <!-- ⑨ 체크리스트 -->
+      <section class="editor-panel" id="panel-checklist" data-icon="🎒" data-label="준비물 체크리스트">
+        <div class="panel-head"><span class="panel-icon">🎒</span><h2>준비물 체크리스트</h2><span class="panel-count" id="count-checklist"></span></div>
+        <div id="checklist-list" class="repeat-list"></div>
+        <button type="button" class="btn-add" id="add-checklist">+ 준비물 추가</button>
+      </section>
+
+      <!-- ⑩ FAQ -->
+      <section class="editor-panel" id="panel-faq" data-icon="❓" data-label="FAQ">
+        <div class="panel-head"><span class="panel-icon">❓</span><h2>자주 묻는 질문</h2><span class="panel-count" id="count-faq"></span></div>
+        <div id="faq-list" class="repeat-list"></div>
+        <button type="button" class="btn-add" id="add-faq">+ 질문 추가</button>
+      </section>
+
+      <!-- ⑪ 설문조사 -->
+      <section class="editor-panel" id="panel-survey" data-icon="📝" data-label="설문조사">
+        <div class="panel-head"><span class="panel-icon">📝</span><h2>설문조사</h2></div>
+        <div class="field-grid">
+          <label class="span-2">설문 링크 <input type="text" id="f-survey-url" placeholder="https://forms.gle/..." /></label>
+          <label>예상 소요시간 <input type="text" id="f-survey-duration" placeholder="약 3분" /></label>
+        </div>
+      </section>
+
+      <!-- 저장 -->
+      <section class="editor-panel" id="panel-save" data-icon="💾" data-label="저장하기">
+        <div class="panel-head"><span class="panel-icon">💾</span><h2>저장하기</h2></div>
+        <div class="save-hero">
+          <div class="save-hero-emoji">📦</div>
+          <p>버튼을 누르면 <code>content.js</code> 파일이 다운로드됩니다.<br />
+          다운로드된 파일을 프로젝트의 <code>js/content.js</code> 위치에 덮어써주세요.</p>
+          <div class="save-actions">
+            <button type="button" class="btn btn-primary" id="btn-download" style="width:auto;">⬇ content.js 파일 저장</button>
+            <button type="button" class="btn btn-outline" id="btn-show-code" style="width:auto;">코드로 보기 / 복사</button>
+          </div>
+        </div>
+        <textarea id="code-output" class="code-output" rows="14" readonly hidden></textarea>
+      </section>
+
+      <!-- 이전 / 다음 패널로 이동하는 하단 내비게이션 (JS가 자동으로 채워줍니다) -->
+      <div class="panel-footer-nav" id="panel-footer-nav"></div>
+
+    </div>
+  </main>
+
+  <!-- 참가자용 사이트의 플로팅 연락처 버튼과 같은 자리·같은 스타일의 저장 버튼 -->
+  <button type="button" class="floating-save" id="floating-save" title="content.js 파일 저장" aria-label="content.js 파일 저장">
+    💾
+  </button>
+
+  <script src="js/content.js"></script>
+  <script src="js/editor.js"></script>
+</body>
+</html>
