@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>프로젝트 목록 | 드림투어</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/editor.css" />
+<link rel="stylesheet" href="css/projects.css" />
+</head>
+<body class="editor-body">
+
+  <!--
+    =====================================================================
+     [운영팀 전용] 프로젝트(행사 초안) 목록
+    =====================================================================
+     - 여기서 관리하는 초안은 "이 브라우저"에만 저장됩니다(localStorage).
+       다른 컴퓨터에서는 보이지 않으니, 완성되면 꼭 편집기의
+       "content.js 파일 저장"으로 다운로드해서 실제 사이트에 반영하세요.
+     - "+ 새 프로젝트"를 누르면 빈 편집기가 열립니다.
+     - 예전에 만든 사이트(js/content.js)가 있다면 "현재 content.js 불러오기"로
+       첫 프로젝트를 손쉽게 시작할 수 있습니다.
+    =====================================================================
+  -->
+
+  <header class="editor-header">
+    <div class="editor-header-inner">
+      <div class="editor-header-text">
+        <div class="editor-eyebrow">운영팀 전용 도구</div>
+        <div class="editor-title">🗂️ 프로젝트 목록</div>
+        <div class="editor-subtitle">행사 초안을 저장해두고 이어서 편집하거나, 새 행사를 시작하세요</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="editor-main projects-main">
+    <div class="editor-container">
+
+      <div class="editor-notice">
+        ℹ️ 이 목록은 지금 사용 중인 브라우저에만 저장됩니다(localStorage). 다른 컴퓨터로
+        옮기거나 실제 사이트에 반영하려면, 편집기에서 <b>"content.js 파일 저장"</b>으로
+        다운로드한 뒤 <code>js/content.js</code>에 덮어써주세요.
+      </div>
+
+      <div class="projects-actions">
+        <button type="button" class="btn-add projects-new-btn" id="btn-new-project">+ 새 프로젝트</button>
+        <button type="button" class="btn btn-outline" id="btn-import-current" style="width:auto;">📥 현재 content.js 불러오기</button>
+      </div>
+
+      <div id="projects-list" class="projects-list"></div>
+
+    </div>
+  </main>
+
+  <script src="js/content.js"></script>
+  <script src="js/project-store.js"></script>
+  <script src="js/projects.js"></script>
+</body>
+</html>

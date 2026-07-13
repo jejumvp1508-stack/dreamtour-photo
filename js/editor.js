@@ -48,12 +48,34 @@ function withDefaults(src) {
   };
 }
 
-const state = withDefaults(window.CONTENT);
+// URL이 editor.html?project=xxxx 형태면 "프로젝트 모드"로 동작합니다.
+// projects.html(프로젝트 목록)에서 저장해둔 초안을 불러와서 편집하고,
+// 수정할 때마다 자동으로 이 브라우저에 다시 저장합니다.
+const PROJECT_ID = new URLSearchParams(location.search).get("project");
+const PROJECT_SOURCE = PROJECT_ID ? getProjectContent(PROJECT_ID) || {} : window.CONTENT;
+
+const state = withDefaults(PROJECT_SOURCE);
 let dirty = false;
-function markDirty() { dirty = true; }
+
+let _autosaveTimer = null;
+function markDirty() {
+  dirty = true;
+  if (!PROJECT_ID) return;
+  // 타이핑할 때마다 바로바로 저장하지 않고, 잠깐 멈췄을 때 한 번만 저장합니다.
+  clearTimeout(_autosaveTimer);
+  _autosaveTimer = setTimeout(() => {
+    saveProjectContent(PROJECT_ID, buildExportObject());
+    const badge = document.getElementById("autosave-badge");
+    if (badge) {
+      badge.textContent = "✅ 자동 저장됨";
+      clearTimeout(badge._resetTimer);
+      badge._resetTimer = setTimeout(() => { badge.textContent = "🗂️ 이 브라우저에 자동 저장돼요"; }, 1500);
+    }
+  }, 600);
+}
 
 window.addEventListener("beforeunload", function (e) {
-  if (dirty) {
+  if (dirty && !PROJECT_ID) {
     e.preventDefault();
     e.returnValue = "";
   }
@@ -829,6 +851,14 @@ document.addEventListener("DOMContentLoaded", function () {
         connectStatus.className = "photo-status warn";
       }
     }
+  }
+
+  if (PROJECT_ID) {
+    document.getElementById("project-bar").hidden = false;
+    document.getElementById("editor-notice").innerHTML =
+      '🗂️ 이 초안은 지금 사용 중인 브라우저에 자동으로 저장됩니다. 다른 컴퓨터로 옮기거나 ' +
+      '실제 사이트에 반영하려면 여전히 <b>우측 하단의 저장 버튼</b>으로 <code>content.js</code>를 ' +
+      "다운로드해야 해요.";
   }
 
   initWizardNav();

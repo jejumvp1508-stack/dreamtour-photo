@@ -1,0 +1,79 @@
+/* =====================================================================
+   프로젝트 목록(projects.html) 전용 스타일
+   - editor.css의 색상/카드 톤을 그대로 재사용합니다.
+   ===================================================================== */
+
+.projects-main { padding-top: 24px; }
+
+.projects-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.projects-new-btn { flex: 1; min-width: 160px; }
+
+.projects-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .projects-list { grid-template-columns: 1fr 1fr; }
+}
+
+.projects-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-muted);
+  font-size: 13.5px;
+  background: var(--color-card);
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.project-card {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.project-card .project-label {
+  font-weight: 800;
+  font-size: 15.5px;
+  color: var(--color-text);
+}
+.project-card .project-meta {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.project-card .project-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.project-card .project-actions a,
+.project-card .project-actions button {
+  flex: 1;
+  border: none;
+  text-align: center;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 13px;
+}
+.project-card .project-open {
+  background: var(--color-primary);
+  color: #fff;
+}
+.project-card .project-delete {
+  background: var(--color-danger-bg);
+  color: #991b1b;
+  flex: 0 0 auto;
+  padding-left: 14px;
+  padding-right: 14px;
+}

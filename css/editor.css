@@ -52,6 +52,27 @@
   background: rgba(255,255,255,0.14);
   white-space: nowrap;
 }
+.editor-project-bar {
+  max-width: 1100px;
+  margin: 12px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12.5px;
+}
+.editor-project-bar a {
+  color: #fff;
+  font-weight: 700;
+  opacity: 0.92;
+  text-decoration: underline;
+}
+.editor-project-bar span {
+  background: rgba(255,255,255,0.16);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+}
 .editor-progress-track {
   max-width: 1100px;
   margin: 14px auto 0;
