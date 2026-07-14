@@ -21,11 +21,11 @@ window.CONTENT = {
     "faq": true,
     "survey": true
   },
-  "heroImage": "images/KakaoTalk_20251127_133532186_04.jpg",
+  "heroImage": "images/KakaoTalk_Photo_2026-04-27-09-25-38-012.jpeg",
   "heroTagline": "노는게 제일 좋아! 액티비티로 가득찬 하루",
   "notice": {
     "active": false,
-    "text": "우천 시 실내 프로그램으로 대체됩니다. 당일 변동 공지는 단체 카톡방을 확인해주세요."
+    "text": "행사 시작 전 9.81파크 앱을 다운받아주세요!"
   },
   "rainPlan": {
     "hasIndoorAlternative": true,
@@ -80,8 +80,7 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": "",
-        "description": ""
+        "driveFolderUrl": ""
       }
     },
     {
@@ -94,22 +93,21 @@ window.CONTENT = {
       "description": "9.81파크에서 스릴 넘치는 레이싱과 서바이벌 게임을 진행할 예정입니다. 편한 신발과 모자를 착용해주세요. 다양한 상품도 준비되어있습니다.",
       "travelTimeToNext": "버스 이동 약 20분",
       "difficulty": null,
-      "distance": "총 도보 2.3km",
+      "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
       "photo": "images/schedule-2-스크린샷-2026-07-14-오후-3.13.19.png",
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": "",
-        "description": ""
+        "driveFolderUrl": ""
       }
     },
     {
       "id": 3,
       "time": "16:20",
       "endTime": "17:00",
-      "title": "애월 한담 해변-자유 시간",
+      "title": "애월 한담 해변 팀별 활동 및 자유시간",
       "location": "애월 한담 해수욕장",
       "mapUrl": "https://maps.app.goo.gl/2kxpenNDu2x4AGMq5",
       "description": "애월 카페거리로 유명한 한담해변에서 자유시간을 갖습니다. ",
@@ -122,8 +120,7 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": true,
         "formUrl": "https://forms.gle/KKuvmS6VTCrFHcgw9",
-        "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link",
-        "description": ""
+        "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link"
       }
     },
     {
@@ -137,18 +134,13 @@ window.CONTENT = {
       "travelTimeToNext": "버스 이동 약 30분",
       "difficulty": null,
       "distance": null,
-      "meal": {
-        "hasAllergyInfo": true,
-        "allergyNote": "돼지고기, 새우젓(갑각류), 밀가루(부침류)가 포함되어 있습니다. 알레르기가 있으신 분은 사전에 담당자에게 꼭 알려주세요.",
-        "vegetarianOption": "채식 옵션 있음 (사전 신청자에 한해 나물 정식으로 대체 제공)"
-      },
+      "meal": null,
       "freeTimeRecommendation": null,
       "photo": null,
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": "",
-        "description": ""
+        "driveFolderUrl": ""
       }
     },
     {
@@ -168,75 +160,53 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": "",
-        "description": ""
+        "driveFolderUrl": ""
       }
     }
   ],
   "locations": [
     {
       "order": 1,
-      "name": "드림타워 지하 2층 주차장 (집결지)",
-      "description": "행사 시작 집결 장소입니다. 지하 2층 입구에서 스태프가 대기합니다.",
-      "address": "제주특별자치도 제주시 노형동 000-00",
-      "mapUrl": "https://maps.google.com/?q=드림타워+지하주차장"
+      "name": "드림타워 버스주차장 (집결지)",
+      "description": "행사 시작 집결 장소입니다. 입구에서 스태프가 대기하고 있습니다.",
+      "address": "제주특별자치도 제주시 특별자치도, 노연로 12 제주 드림타워 복합 리조트",
+      "mapUrl": "https://maps.app.goo.gl/6uyctH2uYipgu6q5A"
     },
     {
       "order": 2,
-      "name": "제주 곶자왈 도립공원",
-      "description": "숲길 트레킹이 진행되는 장소입니다.",
-      "address": "제주특별자치도 제주시 조천읍 선흘리 000",
-      "mapUrl": "https://maps.google.com/?q=제주+곶자왈+도립공원"
+      "name": "제주 9.81파크",
+      "description": "레이싱 및 서바이벌을 진행합니다.",
+      "address": "제주특별자치도 제주시 애월읍 천덕로 880-24",
+      "mapUrl": "https://maps.app.goo.gl/tdZVHUniEYV14uY66"
     },
     {
       "order": 3,
-      "name": "제주 해녀의 집",
-      "description": "전시 관람 및 자유 시간이 있는 장소입니다.",
-      "address": "제주특별자치도 제주시 구좌읍 000",
-      "mapUrl": "https://maps.google.com/?q=제주+해녀의집"
+      "name": "애월 한담 해변",
+      "description": "팀별 사진 미션 및 자유 시간이 있는 장소입니다.",
+      "address": "제주특별자치도 제주시 애월읍 곽지리 1359",
+      "mapUrl": "https://maps.app.goo.gl/4bJpHZkVCn65rSWw5"
     },
     {
       "order": 4,
-      "name": "돈사돈 본점 (저녁 식사)",
+      "name": "미정",
       "description": "저녁 식사가 진행되는 장소입니다.",
-      "address": "제주특별자치도 제주시 000",
-      "mapUrl": "https://maps.google.com/?q=돈사돈+본점"
+      "address": "미정",
+      "mapUrl": ""
     }
   ],
-  "mapEmbedQuery": "드림타워 지하주차장",
+  "mapEmbedQuery": "드림타워 버스주차장",
   "checklist": [
     "편한 운동화",
-    "얇은 겉옷 (일교차 대비)",
-    "선크림 / 모자 / 선글라스",
-    "개인 물병",
-    "우산 또는 우비 (우천 대비)",
-    "여유분 마스크",
-    "카메라 또는 스마트폰 (사진 촬영용)"
+    "선크림 / 모자 / 선글라스"
   ],
   "faq": [
     {
-      "q": "집합 장소를 못 찾겠어요. 어떻게 하나요?",
-      "a": "당일 담당자(김민지, 010-1234-5678)에게 바로 전화 주세요. 화면 하단 전화 버튼을 누르면 바로 연결됩니다."
-    },
-    {
-      "q": "차량으로 이동해도 되나요? 개인 차량은 어디에 주차하나요?",
-      "a": "개인 차량 이용 시 드림타워 지하주차장에 주차 후 도보로 집결 장소까지 이동해주세요. 주차비는 자체 부담입니다."
-    },
-    {
       "q": "우천 시에는 어떻게 진행되나요?",
-      "a": "우천 시 도보 프로그램은 실내 대체 프로그램으로 변경됩니다. 자세한 내용은 홈 화면의 '우천 시 안내' 섹션을 확인해주세요."
+      "a": "우천 시 도보 프로그램은 실내 대체 프로그램으로 변경됩니다. "
     },
     {
       "q": "식사 시 알레르기가 있으면 어떻게 하나요?",
       "a": "일정표의 저녁 식사 항목에서 알레르기 정보를 확인하실 수 있습니다. 사전에 담당자에게 미리 알려주시면 대체 메뉴를 준비해드립니다."
-    },
-    {
-      "q": "몸이 불편해서 트레킹 코스를 다 걷기 어려운데 괜찮을까요?",
-      "a": "곶자왈 트레킹 코스는 난이도 '보통', 총 도보 2.3km입니다. 중간에 휴식 시간이 있으며, 어려우신 경우 스태프에게 말씀해주시면 별도 안내해드립니다."
-    },
-    {
-      "q": "사진은 어디서 볼 수 있나요?",
-      "a": "행사 종료 후 단체 카톡방을 통해 사진이 공유될 예정입니다."
     }
   ],
   "survey": {
