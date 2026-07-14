@@ -49,17 +49,13 @@ function buildUploadCard(item) {
     return wrap;
   }
 
+  // 참가자 화면에는 업로드 폴더 미리보기를 보여주지 않습니다 (드라이브 폴더가
+  // "링크가 있는 모든 사용자"로 공유되어 있지 않으면 "액세스 권한 필요" 에러가
+  // 보이는 문제도 있고, 운영팀 확인용은 편집기 쪽에 이미 따로 있습니다).
   let html = pu.description
     ? '<div class="upload-description">' + escapeHtml(pu.description) + "</div>"
     : "";
   html += '<a class="upload-pick-btn upload-form-link" href="' + pu.formUrl + '" target="_blank" rel="noopener noreferrer">📸 사진 올리러 가기 (구글폼 열기)</a>';
-
-  const embedUrl = driveFolderEmbedUrl(pu.driveFolderUrl);
-  if (embedUrl) {
-    html +=
-      '<div class="upload-gallery-embed-label">지금까지 올라온 사진</div>' +
-      '<div class="upload-gallery-embed"><iframe src="' + embedUrl + '" loading="lazy" title="업로드된 사진 폴더"></iframe></div>';
-  }
 
   wrap.innerHTML = html;
   return wrap;
