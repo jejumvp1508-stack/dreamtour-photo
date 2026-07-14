@@ -21,7 +21,7 @@ window.CONTENT = {
     "faq": true,
     "survey": true
   },
-  "heroImage": "images/KakaoTalk_Photo_2026-04-27-09-25-38-012.jpeg",
+  "heroImage": "images/IMG_2533.JPG",
   "heroTagline": "노는게 제일 좋아! 액티비티로 가득찬 하루",
   "notice": {
     "active": false,
