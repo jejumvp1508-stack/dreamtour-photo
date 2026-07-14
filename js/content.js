@@ -76,7 +76,7 @@ window.CONTENT = {
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": "images/schedule-1-스크린샷-2026-07-14-오후-3.07.40.png",
+      "photo": "images/schedule-1-스크린샷-2026-07-14-오후-3.07.40.png",
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
@@ -96,7 +96,7 @@ window.CONTENT = {
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": "images/schedule-2-스크린샷-2026-07-14-오후-3.13.19.png",
+      "photo": "images/schedule-2-스크린샷-2026-07-14-오후-3.13.19.png",
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
@@ -116,7 +116,7 @@ window.CONTENT = {
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": "images/schedule-3-스크린샷-2026-07-14-오후-3.16.22.png",
+      "photo": "images/schedule-3-스크린샷-2026-07-14-오후-3.16.22.png",
       "photoUpload": {
         "enabled": true,
         "formUrl": "https://forms.gle/KKuvmS6VTCrFHcgw9",

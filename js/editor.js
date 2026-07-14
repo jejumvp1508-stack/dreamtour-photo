@@ -243,7 +243,12 @@ async function connectImagesFolder() {
 }
 
 function sanitizeFileName(name) {
-  return name.replace(/\s+/g, "-");
+  // 맥에서 고른 한글 파일명은 자모가 분리된 형태(NFD)로 들어올 때가 있는데,
+  // git이 커밋할 때는 이걸 조합형(NFC)으로 자동 변환해버립니다. 그래서
+  // 여기서 미리 NFC로 맞춰두지 않으면, 저장된 실제 파일명과 content.js에
+  // 적힌 경로가 (눈에는 똑같아 보여도) 실제로는 달라서 사진이 안 뜨는
+  // 문제가 생깁니다.
+  return name.normalize("NFC").replace(/\s+/g, "-");
 }
 
 async function saveFileToImagesFolder(file, fileName) {
