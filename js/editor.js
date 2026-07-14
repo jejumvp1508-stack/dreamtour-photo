@@ -347,6 +347,12 @@ function renderUploadViewer(container, item) {
   if (!item.photoUpload || !item.photoUpload.enabled) return;
   if (!item.photoUpload.formUrl) item.photoUpload.formUrl = "";
   if (!item.photoUpload.driveFolderUrl) item.photoUpload.driveFolderUrl = "";
+  if (!item.photoUpload.description) item.photoUpload.description = "";
+
+  container.appendChild(fieldInput(
+    "참가자에게 보여줄 안내 문구 (선택)", item.photoUpload, "description",
+    { textarea: true, rows: 2, span2: true, placeholder: "예: 이 활동에서 찍은 사진을 팀별로 올려주세요!" }
+  ));
 
   container.appendChild(fieldGrid(
     fieldInput("구글폼 링크 (참가자가 사진 올리는 곳)", item.photoUpload, "formUrl", { span2: true, placeholder: "https://forms.gle/..." }),
@@ -578,7 +584,8 @@ function buildExportObject() {
       photoUpload: {
         enabled: !!(it.photoUpload && it.photoUpload.enabled),
         formUrl: (it.photoUpload && it.photoUpload.formUrl) || "",
-        driveFolderUrl: (it.photoUpload && it.photoUpload.driveFolderUrl) || ""
+        driveFolderUrl: (it.photoUpload && it.photoUpload.driveFolderUrl) || "",
+        description: (it.photoUpload && it.photoUpload.description) || ""
       }
     })),
     locations: state.locations.map((loc, idx) => ({
@@ -800,7 +807,7 @@ document.addEventListener("DOMContentLoaded", function () {
     state.schedule.push({
       id: 0, time: "", endTime: "", title: "", location: "", mapUrl: "",
       description: "", travelTimeToNext: "", difficulty: "", distance: "",
-      meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "" }
+      meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "", description: "" }
     });
     renderScheduleList();
     markDirty();

@@ -441,6 +441,12 @@ main {
   border: 1px dashed var(--color-primary-light);
   border-radius: var(--radius-sm);
 }
+.upload-description {
+  font-size: 13px;
+  color: var(--color-text);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
 .upload-pick-btn.upload-form-link {
   display: block;
   width: 100%;

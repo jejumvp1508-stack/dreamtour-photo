@@ -49,7 +49,10 @@ function buildUploadCard(item) {
     return wrap;
   }
 
-  let html = '<a class="upload-pick-btn upload-form-link" href="' + pu.formUrl + '" target="_blank" rel="noopener noreferrer">📸 사진 올리러 가기 (구글폼 열기)</a>';
+  let html = pu.description
+    ? '<div class="upload-description">' + escapeHtml(pu.description) + "</div>"
+    : "";
+  html += '<a class="upload-pick-btn upload-form-link" href="' + pu.formUrl + '" target="_blank" rel="noopener noreferrer">📸 사진 올리러 가기 (구글폼 열기)</a>';
 
   const embedUrl = driveFolderEmbedUrl(pu.driveFolderUrl);
   if (embedUrl) {

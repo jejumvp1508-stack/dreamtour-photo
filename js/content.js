@@ -80,7 +80,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     },
     {
@@ -100,7 +101,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     },
     {
@@ -120,7 +122,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": true,
         "formUrl": "https://forms.gle/KKuvmS6VTCrFHcgw9",
-        "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link"
+        "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link",
+        "description": ""
       }
     },
     {
@@ -144,7 +147,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     },
     {
@@ -164,7 +168,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     }
   ],
