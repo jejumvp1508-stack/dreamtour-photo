@@ -9,22 +9,22 @@
 */
 
 window.CONTENT = {
-  "eventName": "2026 드림투어 27회차",
+  "eventName": "2026 드림투어 28회차",
   "eventSubtitle": "제주 드림투어",
-  "date": "2026-07-15",
-  "dateDisplay": "2026년 7월 15일 (수)",
+  "date": "2026-07-30",
+  "dateDisplay": "2026년 7월 30일 (목)",
   "sectionsEnabled": {
-    "rainPlan": true,
+    "rainPlan": false,
     "staff": false,
     "meetingSummary": true,
     "checklist": true,
     "faq": true,
     "survey": true
   },
-  "heroImage": "images/IMG_2513.JPG",
-  "heroTagline": "제주의 바다와 숲을 함께 걷는 하루",
+  "heroImage": "images/KakaoTalk_20251127_133532186_04.jpg",
+  "heroTagline": "노는게 제일 좋아! 액티비티로 가득찬 하루",
   "notice": {
-    "active": true,
+    "active": false,
     "text": "우천 시 실내 프로그램으로 대체됩니다. 당일 변동 공지는 단체 카톡방을 확인해주세요."
   },
   "rainPlan": {
@@ -33,9 +33,9 @@ window.CONTENT = {
     "decisionTime": "당일 오전 8시경, 기상 상황에 따라 최종 공지"
   },
   "contact": {
-    "name": "김민지",
+    "name": "이나연",
     "role": "현장 총괄 담당자",
-    "phone": "010-1234-5678"
+    "phone": "010-2560-1508"
   },
   "staff": [
     {
@@ -59,77 +59,79 @@ window.CONTENT = {
   ],
   "meetingSummary": {
     "time": "13:00",
-    "location": "드림타워 지하 2층 주차장 입구",
-    "mapUrl": "https://maps.google.com/?q=드림타워+지하주차장"
+    "location": "드림타워 1층 주차장",
+    "mapUrl": "https://maps.app.goo.gl/Tp2Mm5dz4Z3jKfdQ7"
   },
   "schedule": [
     {
       "id": 1,
       "time": "13:00",
-      "endTime": "13:20",
+      "endTime": "13:30",
       "title": "드림타워 버스 주차장 집결",
-      "location": "드림타워 지하 2층 주차장 입구",
-      "mapUrl": "https://maps.google.com/?q=드림타워+지하주차장",
+      "location": "드림타워 주차장",
+      "mapUrl": "https://maps.app.goo.gl/Tp2Mm5dz4Z3jKfdQ7",
       "description": "출발 전 명단 확인 및 인원 점검을 진행합니다. 늦어도 12시 50분까지는 도착해주세요.",
-      "travelTimeToNext": "버스 이동 약 20분",
+      "travelTimeToNext": "버스 이동 약 30분",
       "difficulty": null,
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": null,
+      "photo": "images/schedule-1-스크린샷-2026-07-14-오후-3.07.40.png",
       "photoUpload": {
-        "enabled": false
+        "enabled": false,
+        "formUrl": "",
+        "driveFolderUrl": ""
       }
     },
     {
       "id": 2,
-      "time": "13:40",
-      "endTime": "15:30",
-      "title": "곶자왈 숲길 트레킹",
-      "location": "제주 곶자왈 도립공원",
-      "mapUrl": "https://maps.google.com/?q=제주+곶자왈+도립공원",
-      "description": "울창한 원시림 숲길을 따라 가볍게 걷는 코스입니다. 편한 신발과 모자를 착용해주세요. 중간에 20분 휴식 시간이 있습니다.",
-      "travelTimeToNext": "버스 이동 약 15분",
-      "difficulty": "보통",
+      "time": "14:00",
+      "endTime": "16:00",
+      "title": "9.81파크에서 즐기는 액티비티 프로그램",
+      "location": "9.81파크",
+      "mapUrl": "https://maps.app.goo.gl/itNk1r6u1yJuhv8o7",
+      "description": "9.81파크에서 스릴 넘치는 레이싱과 서바이벌 게임을 진행할 예정입니다. 편한 신발과 모자를 착용해주세요. 다양한 상품도 준비되어있습니다.",
+      "travelTimeToNext": "버스 이동 약 20분",
+      "difficulty": null,
       "distance": "총 도보 2.3km",
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": null,
+      "photo": "images/schedule-2-스크린샷-2026-07-14-오후-3.13.19.png",
       "photoUpload": {
-        "enabled": true
+        "enabled": false,
+        "formUrl": "",
+        "driveFolderUrl": ""
       }
     },
     {
       "id": 3,
-      "time": "15:45",
+      "time": "16:20",
       "endTime": "17:00",
-      "title": "제주 해녀의 집 - 자유 관람 및 간식",
-      "location": "제주 해녀의 집",
-      "mapUrl": "https://maps.google.com/?q=제주+해녀의집",
-      "description": "해녀 문화 전시 관람 후 자유 시간을 가집니다. 근처 해안 산책로도 함께 즐겨보세요.",
-      "travelTimeToNext": "도보 이동 약 5분",
-      "difficulty": "쉬움",
-      "distance": "총 도보 0.8km",
+      "title": "애월 한담 해변-자유 시간",
+      "location": "애월 한담 해수욕장",
+      "mapUrl": "https://maps.app.goo.gl/2kxpenNDu2x4AGMq5",
+      "description": "애월 카페거리로 유명한 한담해변에서 자유시간을 갖습니다. ",
+      "travelTimeToNext": "버스로 이동 약 10분",
+      "difficulty": null,
+      "distance": null,
       "meal": null,
-      "freeTimeRecommendation": [
-        "1순위: 해녀 전시관 관람 (15분 소요)",
-        "2순위: 해안 산책로 사진 촬영 포인트 방문",
-        "3순위: 인근 카페에서 휴식 (도보 3분 거리)"
-      ],
-      "photo": null,
+      "freeTimeRecommendation": null,
+      "photo": "images/schedule-3-스크린샷-2026-07-14-오후-3.16.22.png",
       "photoUpload": {
-        "enabled": false
+        "enabled": true,
+        "formUrl": "https://forms.gle/KKuvmS6VTCrFHcgw9",
+        "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link"
       }
     },
     {
       "id": 4,
       "time": "17:10",
       "endTime": "18:30",
-      "title": "저녁 식사 - 제주 흑돼지 전문점",
-      "location": "돈사돈 본점",
-      "mapUrl": "https://maps.google.com/?q=돈사돈+본점",
-      "description": "제주 흑돼지 구이와 지역 반찬으로 저녁 식사를 진행합니다.",
-      "travelTimeToNext": null,
+      "title": "저녁 식사(미정)",
+      "location": "미정",
+      "mapUrl": "",
+      "description": "",
+      "travelTimeToNext": "버스 이동 약 30분",
       "difficulty": null,
       "distance": null,
       "meal": {
@@ -140,16 +142,18 @@ window.CONTENT = {
       "freeTimeRecommendation": null,
       "photo": null,
       "photoUpload": {
-        "enabled": false
+        "enabled": false,
+        "formUrl": "",
+        "driveFolderUrl": ""
       }
     },
     {
       "id": 5,
-      "time": "18:40",
+      "time": "18:30",
       "endTime": null,
       "title": "드림타워 도착 및 해산",
-      "location": "드림타워 지하 2층 주차장",
-      "mapUrl": "https://maps.google.com/?q=드림타워+지하주차장",
+      "location": "드림타워 주차장",
+      "mapUrl": "",
       "description": "안전하게 귀가하시기 바라며, 오늘 하루 함께해주셔서 감사합니다. 설문조사 참여를 부탁드립니다!",
       "travelTimeToNext": null,
       "difficulty": null,
@@ -158,7 +162,9 @@ window.CONTENT = {
       "freeTimeRecommendation": null,
       "photo": null,
       "photoUpload": {
-        "enabled": false
+        "enabled": false,
+        "formUrl": "",
+        "driveFolderUrl": ""
       }
     }
   ],
@@ -229,7 +235,7 @@ window.CONTENT = {
     }
   ],
   "survey": {
-    "url": "https://forms.gle/example-survey-link",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSdx-s04cY7PM-Xc5kme6pe14k593SA2WMCPOWVz4gGqOEt_eA/viewform?usp=sharing&ouid=107652471590558082793",
     "duration": "약 3분"
   }
 };
