@@ -24,7 +24,7 @@ window.CONTENT = {
   "heroImage": "images/IMG_2533.JPG",
   "heroTagline": "노는게 제일 좋아! 액티비티로 가득찬 하루",
   "notice": {
-    "active": false,
+    "active": true,
     "text": "행사 시작 전 9.81파크 앱을 다운받아주세요!"
   },
   "rainPlan": {
@@ -80,7 +80,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     },
     {
@@ -100,7 +101,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     },
     {
@@ -120,7 +122,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": true,
         "formUrl": "https://forms.gle/KKuvmS6VTCrFHcgw9",
-        "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link"
+        "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link",
+        "description": ""
       }
     },
     {
@@ -140,7 +143,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     },
     {
@@ -160,7 +164,8 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
-        "driveFolderUrl": ""
+        "driveFolderUrl": "",
+        "description": ""
       }
     }
   ],
