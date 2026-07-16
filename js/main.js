@@ -26,6 +26,15 @@ function telHref(phone) {
   return "tel:" + String(phone).replace(/[^0-9+]/g, "");
 }
 
+// "2026-07-02" 같은 날짜 값을 "7/2(목)" 형태의 표시용 문구로 바꿔줍니다.
+function formatDateLabel(isoDate) {
+  if (!isoDate) return "";
+  const d = new Date(isoDate + "T00:00:00");
+  if (isNaN(d.getTime())) return isoDate;
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  return (d.getMonth() + 1) + "/" + d.getDate() + "(" + days[d.getDay()] + ")";
+}
+
 // 구글맵 버튼 HTML 조각 생성
 function mapButtonHtml(mapUrl, label) {
   if (!mapUrl) return "";

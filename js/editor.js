@@ -17,6 +17,15 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+// "2026-07-02" 같은 날짜 값을 목록 제목에 보여줄 "7/2(목)" 형태로 바꿔줍니다.
+function formatDateLabel(isoDate) {
+  if (!isoDate) return "";
+  const d = new Date(isoDate + "T00:00:00");
+  if (isNaN(d.getTime())) return isoDate;
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  return (d.getMonth() + 1) + "/" + d.getDate() + "(" + days[d.getDay()] + ")";
+}
+
 // window.CONTENT에 없는 값이 있어도 편집기가 깨지지 않도록 기본값을 채워줍니다.
 function withDefaults(src) {
   src = src || {};
@@ -389,12 +398,13 @@ function renderScheduleList() {
   container.innerHTML = "";
   state.schedule.forEach((item, idx) => {
     const { row, body } = createRowShell(
-      (idx + 1) + ". " + (item.time || "--:--") + " " + (item.title || "(제목 없음)"),
+      (idx + 1) + ". " + (item.date ? formatDateLabel(item.date) + " " : "") + (item.time || "--:--") + " " + (item.title || "(제목 없음)"),
       item, state.schedule, renderScheduleList
     );
 
     const photoLabel = fieldInput("관련 사진 경로 (선택)", item, "photo", { span2: true, placeholder: "images/schedule-1.jpg" });
     body.appendChild(fieldGrid(
+      fieldInput("일자 (선택, 여러 날 행사만)", item, "date", { type: "date" }),
       fieldInput("시작 시각", item, "time", { placeholder: "13:00" }),
       fieldInput("종료 시각 (선택)", item, "endTime", { placeholder: "13:20" }),
       fieldInput("일정 제목", item, "title", { span2: true }),
@@ -632,6 +642,7 @@ function buildExportObject() {
     },
     schedule: state.schedule.map((it, idx) => ({
       id: idx + 1,
+      date: it.date || "",
       time: it.time || "",
       endTime: it.endTime || null,
       title: it.title || "",
@@ -897,7 +908,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("add-schedule").addEventListener("click", () => {
     state.schedule.push({
-      id: 0, time: "", endTime: "", title: "", location: "", mapUrl: "",
+      id: 0, date: "", time: "", endTime: "", title: "", location: "", mapUrl: "",
       description: "", travelTimeToNext: "", difficulty: "", distance: "",
       meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "", description: "" }
     });

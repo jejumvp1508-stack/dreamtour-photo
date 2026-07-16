@@ -66,6 +66,7 @@ window.CONTENT = {
   "schedule": [
     {
       "id": 1,
+      "date": "",
       "time": "13:00",
       "endTime": "13:30",
       "title": "드림타워 버스 주차장 집결",
@@ -87,6 +88,7 @@ window.CONTENT = {
     },
     {
       "id": 2,
+      "date": "",
       "time": "14:00",
       "endTime": "16:00",
       "title": "9.81파크에서 즐기는 액티비티 프로그램",
@@ -108,6 +110,7 @@ window.CONTENT = {
     },
     {
       "id": 3,
+      "date": "",
       "time": "16:20",
       "endTime": "17:00",
       "title": "애월 한담 해변 팀별 활동 및 자유시간",
@@ -129,6 +132,7 @@ window.CONTENT = {
     },
     {
       "id": 4,
+      "date": "",
       "time": "17:10",
       "endTime": "18:30",
       "title": "저녁 식사(미정)",
@@ -150,6 +154,7 @@ window.CONTENT = {
     },
     {
       "id": 5,
+      "date": "",
       "time": "18:30",
       "endTime": null,
       "title": "드림타워 도착 및 해산",

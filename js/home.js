@@ -71,7 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
           (item) =>
             '<div class="timeline-item">' +
             '<div style="padding:2px 0 10px 4px;">' +
-            '<div style="font-weight:800; color:var(--color-primary-dark); font-size:13px;">' + escapeHtml(item.time) + "</div>" +
+            '<div style="font-weight:800; color:var(--color-primary-dark); font-size:13px;">' +
+            (item.date ? escapeHtml(formatDateLabel(item.date)) + " · " : "") + escapeHtml(item.time) + "</div>" +
             '<div style="font-weight:700; font-size:14px;">' + escapeHtml(item.title) + "</div>" +
             '<div style="font-size:12.5px; color:var(--color-muted);">' + escapeHtml(item.location) + "</div>" +
             "</div>" +
