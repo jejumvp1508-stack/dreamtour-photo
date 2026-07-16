@@ -28,7 +28,7 @@ function withDefaults(src) {
     heroImage: src.heroImage || "",
     heroTagline: src.heroTagline || "",
     sectionsEnabled: Object.assign(
-      { rainPlan: true, staff: true, meetingSummary: true, checklist: true, faq: true, survey: true },
+      { rainPlan: true, staff: true, meetingSummary: true, checklist: true, faq: true, survey: true, flight: false },
       src.sectionsEnabled || {}
     ),
     notice: Object.assign({ active: false, text: "" }, src.notice || {}),
@@ -44,7 +44,10 @@ function withDefaults(src) {
     mapEmbedQuery: src.mapEmbedQuery || "",
     checklist: src.checklist ? deepClone(src.checklist) : [],
     faq: src.faq ? deepClone(src.faq) : [],
-    survey: Object.assign({ url: "", duration: "" }, src.survey || {})
+    survey: Object.assign({ url: "", duration: "" }, src.survey || {}),
+    flight: Object.assign({ formUrl: "", notice: "", records: [] }, src.flight || {}, {
+      records: src.flight && src.flight.records ? deepClone(src.flight.records) : []
+    })
   };
 }
 
@@ -535,6 +538,66 @@ function renderFaqList() {
 }
 
 // ---------------------------------------------------------------
+// ⑫ 항공권 정보
+// ---------------------------------------------------------------
+const FLIGHT_PASTE_FIELDS = [
+  "name", "departureDate", "departureAirline", "departureTime", "departureLocation", "departureFlight", "departureReservation",
+  "returnDate", "returnAirline", "returnTime", "returnLocation", "returnFlight", "returnReservation"
+];
+
+// 엑셀/구글시트에서 표를 복사해 붙여넣으면 탭으로 구분된 텍스트가 들어옵니다.
+// "NO." 순번 칸이 같이 복사돼 있어도, 머리글(제목) 줄이 섞여 있어도 알아서 걸러냅니다.
+function parseFlightPasteText(text) {
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => line.split("\t").map((cell) => cell.trim()))
+    .filter((cols) => cols.some(Boolean))
+    .filter((cols) => !/^(no\.?|번호)$/i.test(cols[0] || ""));
+
+  return lines
+    .map((cols) => {
+      let values = cols;
+      if (values.length > FLIGHT_PASTE_FIELDS.length && /^\d+$/.test(values[0])) {
+        values = values.slice(1);
+      }
+      const record = {};
+      FLIGHT_PASTE_FIELDS.forEach((key, idx) => { record[key] = values[idx] || ""; });
+      return record;
+    })
+    .filter((r) => r.name && r.name !== "성함(한글)" && r.name !== "성함" && r.name !== "이름");
+}
+
+function renderFlightList() {
+  const container = document.getElementById("flight-list");
+  container.innerHTML = "";
+  state.flight.records.forEach((item, idx) => {
+    const { row, body } = createRowShell(
+      (idx + 1) + ". " + (item.name || "(이름 없음)"),
+      item, state.flight.records, renderFlightList
+    );
+    body.appendChild(fieldInput("성함", item, "name", { span2: true }));
+    body.appendChild(fieldGrid(
+      fieldInput("출발일자", item, "departureDate", { placeholder: "7/2(목)" }),
+      fieldInput("출발항공사", item, "departureAirline"),
+      fieldInput("출발시각", item, "departureTime", { placeholder: "06:35" }),
+      fieldInput("출발지", item, "departureLocation"),
+      fieldInput("출발편명", item, "departureFlight", { placeholder: "KE1007" }),
+      fieldInput("출발 예약번호", item, "departureReservation")
+    ));
+    body.appendChild(fieldGrid(
+      fieldInput("복귀일자", item, "returnDate", { placeholder: "7/4(토)" }),
+      fieldInput("복귀항공사", item, "returnAirline"),
+      fieldInput("복귀시각", item, "returnTime", { placeholder: "10:25" }),
+      fieldInput("복귀지", item, "returnLocation"),
+      fieldInput("복귀편명", item, "returnFlight", { placeholder: "KE1174" }),
+      fieldInput("복귀 예약번호", item, "returnReservation")
+    ));
+    container.appendChild(row);
+  });
+  setCount("count-flight", state.flight.records.length);
+}
+
+// ---------------------------------------------------------------
 // content.js 파일 텍스트 생성 + 다운로드
 // ---------------------------------------------------------------
 function buildExportObject() {
@@ -549,7 +612,8 @@ function buildExportObject() {
       meetingSummary: !!state.sectionsEnabled.meetingSummary,
       checklist: !!state.sectionsEnabled.checklist,
       faq: !!state.sectionsEnabled.faq,
-      survey: !!state.sectionsEnabled.survey
+      survey: !!state.sectionsEnabled.survey,
+      flight: !!state.sectionsEnabled.flight
     },
     heroImage: state.heroImage,
     heroTagline: state.heroTagline,
@@ -603,7 +667,26 @@ function buildExportObject() {
     mapEmbedQuery: state.mapEmbedQuery,
     checklist: state.checklist.filter((s) => s && s.trim()),
     faq: state.faq.map((f) => ({ q: f.q || "", a: f.a || "" })),
-    survey: { url: state.survey.url, duration: state.survey.duration }
+    survey: { url: state.survey.url, duration: state.survey.duration },
+    flight: {
+      formUrl: state.flight.formUrl || "",
+      notice: state.flight.notice || "",
+      records: state.flight.records.map((r) => ({
+        name: r.name || "",
+        departureDate: r.departureDate || "",
+        departureAirline: r.departureAirline || "",
+        departureTime: r.departureTime || "",
+        departureLocation: r.departureLocation || "",
+        departureFlight: r.departureFlight || "",
+        departureReservation: r.departureReservation || "",
+        returnDate: r.returnDate || "",
+        returnAirline: r.returnAirline || "",
+        returnTime: r.returnTime || "",
+        returnLocation: r.returnLocation || "",
+        returnFlight: r.returnFlight || "",
+        returnReservation: r.returnReservation || ""
+      }))
+    }
   };
 }
 
@@ -797,11 +880,15 @@ document.addEventListener("DOMContentLoaded", function () {
   bindInput("f-survey-url", state.survey, "url");
   bindInput("f-survey-duration", state.survey, "duration");
 
+  bindInput("f-flight-formUrl", state.flight, "formUrl");
+  bindInput("f-flight-notice", state.flight, "notice");
+
   renderStaffList();
   renderScheduleList();
   renderLocationsList();
   renderChecklistList();
   renderFaqList();
+  renderFlightList();
 
   document.getElementById("add-staff").addEventListener("click", () => {
     state.staff.push({ name: "", role: "", phone: "", photo: "" });
@@ -830,6 +917,34 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("add-faq").addEventListener("click", () => {
     state.faq.push({ q: "", a: "" });
     renderFaqList();
+    markDirty();
+  });
+  document.getElementById("add-flight").addEventListener("click", () => {
+    state.flight.records.push({
+      name: "", departureDate: "", departureAirline: "", departureTime: "", departureLocation: "",
+      departureFlight: "", departureReservation: "", returnDate: "", returnAirline: "", returnTime: "",
+      returnLocation: "", returnFlight: "", returnReservation: ""
+    });
+    renderFlightList();
+    markDirty();
+  });
+  document.getElementById("btn-flight-import").addEventListener("click", () => {
+    const ta = document.getElementById("f-flight-paste");
+    const parsed = parseFlightPasteText(ta.value);
+    if (!parsed.length) {
+      alert("가져올 내용이 없어요. 엑셀에서 표를 복사해서 붙여넣어주세요.");
+      return;
+    }
+    state.flight.records = state.flight.records.concat(parsed);
+    ta.value = "";
+    renderFlightList();
+    markDirty();
+  });
+  document.getElementById("btn-flight-clear").addEventListener("click", () => {
+    if (!state.flight.records.length) return;
+    if (!confirm("등록된 항공권 명단을 전부 삭제할까요? (되돌릴 수 없어요)")) return;
+    state.flight.records = [];
+    renderFlightList();
     markDirty();
   });
 

@@ -349,6 +349,33 @@ input:focus, textarea:focus, select:focus {
   border-radius: var(--radius-sm);
 }
 
+.btn-danger-outline {
+  border: 1.5px solid #fecaca;
+  background: var(--color-danger-bg);
+  color: #991b1b;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+/* 항공권 명단 붙여넣기 가져오기 상자 */
+.flight-import-box {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.flight-import-box textarea { font-family: monospace; font-size: 12px; }
+.flight-import-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.flight-import-actions .btn-add { margin: 0; }
+
 /* ---------------------------------------------------------------
    섹션 사용/사용안함 토글 (패널 맨 위에 배치)
    --------------------------------------------------------------- */

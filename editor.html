@@ -171,6 +171,40 @@
         <button type="button" class="btn-add" id="add-schedule">+ 일정 항목 추가</button>
       </section>
 
+      <!-- 항공권 정보 -->
+      <section class="editor-panel" id="panel-flight" data-icon="✈️" data-label="항공권 정보">
+        <div class="panel-head"><span class="panel-icon">✈️</span><h2>항공권 정보</h2><span class="panel-count" id="count-flight"></span></div>
+        <div class="section-toggle">
+          <label class="checkbox-line">
+            <input type="checkbox" data-section-key="flight" />
+            이 섹션 사용 (끄면 하단 메뉴에서 항공권 탭도 함께 사라져요 — 데이터는 남아있어요)
+          </label>
+        </div>
+        <p class="editor-hint">참가자가 항공 정보를 입력하는 구글폼 링크와, 예약이 끝난 뒤 본인 성함으로 항공권을 조회할 수 있는 명단을 관리합니다.</p>
+        <div class="field-grid">
+          <label class="span-2">항공 정보 입력용 구글폼 링크
+            <input type="text" id="f-flight-formUrl" placeholder="https://docs.google.com/forms/d/.../viewform" />
+          </label>
+          <label class="span-2">참가자에게 보여줄 안내 문구 (선택)
+            <textarea id="f-flight-notice" rows="2" placeholder="예: 먼저 구글폼으로 항공 정보를 입력해주세요. 예약이 완료되면 아래에서 본인 성함으로 조회할 수 있어요."></textarea>
+          </label>
+        </div>
+
+        <div class="flight-import-box">
+          <label class="span-2">엑셀(또는 구글시트)에서 명단 표를 그대로 복사해서 붙여넣으세요
+            <textarea id="f-flight-paste" rows="4" placeholder="성함	출발일자	출발항공사	출발시각	출발지	항공편	예약번호	복귀일자	복귀항공사	복귀시각	복귀지	항공편	예약번호"></textarea>
+          </label>
+          <p class="editor-hint">순서: 성함 / 출발일자 / 출발항공사 / 출발시각 / 출발지 / 출발편명 / 출발예약번호 / 복귀일자 / 복귀항공사 / 복귀시각 / 복귀지 / 복귀편명 / 복귀예약번호. 맨 앞에 순번(NO.) 칸이나 머리글(제목) 줄이 같이 복사돼도 자동으로 걸러집니다. 기존 명단에 추가되니, 다시 붙여넣으면 중복될 수 있어요.</p>
+          <div class="flight-import-actions">
+            <button type="button" class="btn-add" id="btn-flight-import">📋 붙여넣은 표에서 가져오기</button>
+            <button type="button" class="btn-danger-outline" id="btn-flight-clear">전체 삭제</button>
+          </div>
+        </div>
+
+        <div id="flight-list" class="repeat-list"></div>
+        <button type="button" class="btn-add" id="add-flight">+ 항공권 직접 추가</button>
+      </section>
+
       <!-- ⑧ 오시는 길 장소 목록 -->
       <section class="editor-panel" id="panel-locations" data-icon="🗺️" data-label="오시는 길">
         <div class="panel-head"><span class="panel-icon">🗺️</span><h2>오시는 길 / 동선</h2><span class="panel-count" id="count-locations"></span></div>

@@ -19,7 +19,8 @@ window.CONTENT = {
     "meetingSummary": true,
     "checklist": true,
     "faq": true,
-    "survey": true
+    "survey": true,
+    "flight": false
   },
   "heroImage": "images/IMG_2533.JPG",
   "heroTagline": "노는게 제일 좋아! 액티비티로 가득찬 하루",
@@ -217,5 +218,10 @@ window.CONTENT = {
   "survey": {
     "url": "https://docs.google.com/forms/d/e/1FAIpQLSdx-s04cY7PM-Xc5kme6pe14k593SA2WMCPOWVz4gGqOEt_eA/viewform?usp=sharing&ouid=107652471590558082793",
     "duration": "약 3분"
+  },
+  "flight": {
+    "formUrl": "",
+    "notice": "",
+    "records": []
   }
 };

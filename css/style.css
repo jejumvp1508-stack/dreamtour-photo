@@ -469,6 +469,54 @@ main {
   border-radius: var(--radius-sm);
 }
 
+/* ---------------------------------------------------------------
+   항공권 조회 (flight.html)
+   --------------------------------------------------------------- */
+.flight-notice {
+  font-size: 13px;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+.flight-form-link {
+  margin-bottom: 14px;
+}
+.flight-search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.flight-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+.flight-search .btn { width: auto; padding: 11px 18px; }
+.flight-empty { font-size: 13px; color: var(--color-muted); }
+.flight-result-card {
+  background: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.flight-result-card:last-child { margin-bottom: 0; }
+.flight-result-name {
+  font-weight: 800;
+  font-size: 14.5px;
+  color: var(--color-primary-dark);
+  margin-bottom: 8px;
+}
+.flight-leg { margin-bottom: 8px; }
+.flight-leg:last-child { margin-bottom: 0; }
+.flight-leg-label { font-size: 11.5px; font-weight: 700; color: var(--color-muted); }
+.flight-leg-main { font-size: 14px; font-weight: 700; }
+.flight-leg-sub { font-size: 12.5px; color: var(--color-muted); }
+.flight-reservation { font-size: 13px; margin-top: 2px; }
+.flight-reservation b { color: var(--color-primary-dark); letter-spacing: 0.5px; }
+
 .info-row {
   display: flex;
   flex-wrap: wrap;
