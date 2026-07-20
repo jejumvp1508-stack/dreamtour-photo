@@ -26,7 +26,7 @@ window.CONTENT = {
   "heroTagline": "시원한 바다에서 여름나기 프로젝트!",
   "notice": {
     "active": true,
-    "text": "해수욕 후 샤워하실 샤워도구(샴푸,린스,바디워시) 및 수건은 직접 챙겨주세요!"
+    "text": "해수욕 하실 분들은 샤워도구(샴푸,린스,바디워시 등) 및 수건은 직접 챙겨오셔야 합니다. "
   },
   "rainPlan": {
     "hasIndoorAlternative": true,
@@ -136,7 +136,7 @@ window.CONTENT = {
       "time": "17:40",
       "endTime": "18:40",
       "title": "저녁 식사",
-      "location": "오리삼춘",
+      "location": "한방누룽지백숙",
       "mapUrl": "https://maps.app.goo.gl/D9WYVRNs5urjTxSu9",
       "description": "함덕해수욕장이 한눈에 보이는 시원한 식당에 누룽지백숙이 식사로 준비됩니다.",
       "travelTimeToNext": "버스 이동 약 30분",
