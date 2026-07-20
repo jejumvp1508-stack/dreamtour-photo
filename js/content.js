@@ -72,7 +72,7 @@ window.CONTENT = {
       "title": "드림타워 버스 주차장 집결",
       "location": "드림타워 주차장",
       "mapUrl": "https://maps.app.goo.gl/Tp2Mm5dz4Z3jKfdQ7",
-      "description": "출발 전 명단 확인 및 인원 점검을 진행합니다. 늦어도 12시 50분까지는 도착해주세요.",
+      "description": "출발 전 명단 확인 및 인원 점검을 진행합니다. 늦어도 13시 20분까지는 도착해주세요.",
       "travelTimeToNext": "버스 이동 약 40분",
       "difficulty": null,
       "distance": null,
@@ -202,7 +202,8 @@ window.CONTENT = {
   "checklist": [
     "편한 운동화",
     "선크림 / 모자 / 선글라스",
-    "(해수욕 진행 시) 샴푸,린스,바디워시, 타월 등"
+    "손선풍기",
+    "(해수욕 진행 또는 땀으로 물샤워 하실 분들) 샴푸,린스,바디워시, 타월 등"
   ],
   "faq": [
     {
