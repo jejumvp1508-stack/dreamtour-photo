@@ -23,10 +23,10 @@ window.CONTENT = {
     "flight": false
   },
   "heroImage": "images/IMG_2533.JPG",
-  "heroTagline": "노는게 제일 좋아! 액티비티로 가득찬 하루",
+  "heroTagline": "시원한 바다에서 여름나기 프로젝트!",
   "notice": {
     "active": true,
-    "text": "행사 시작 전 9.81파크 앱을 다운받아주세요!"
+    "text": "해수욕 후 샤워하실 샤워도구(샴푸,린스,바디워시) 및 수건은 직접 챙겨주세요!"
   },
   "rainPlan": {
     "hasIndoorAlternative": true,
@@ -66,14 +66,14 @@ window.CONTENT = {
   "schedule": [
     {
       "id": 1,
-      "date": "",
+      "date": "2026-07-30",
       "time": "13:00",
       "endTime": "13:30",
       "title": "드림타워 버스 주차장 집결",
       "location": "드림타워 주차장",
       "mapUrl": "https://maps.app.goo.gl/Tp2Mm5dz4Z3jKfdQ7",
       "description": "출발 전 명단 확인 및 인원 점검을 진행합니다. 늦어도 12시 50분까지는 도착해주세요.",
-      "travelTimeToNext": "버스 이동 약 30분",
+      "travelTimeToNext": "버스 이동 약 40분",
       "difficulty": null,
       "distance": null,
       "meal": null,
@@ -88,19 +88,19 @@ window.CONTENT = {
     },
     {
       "id": 2,
-      "date": "",
-      "time": "14:00",
+      "date": "2026-07-30",
+      "time": "14:20",
       "endTime": "16:00",
-      "title": "9.81파크에서 즐기는 액티비티 프로그램",
-      "location": "9.81파크",
-      "mapUrl": "https://maps.app.goo.gl/itNk1r6u1yJuhv8o7",
-      "description": "9.81파크에서 스릴 넘치는 레이싱과 서바이벌 게임을 진행할 예정입니다. 편한 신발과 모자를 착용해주세요. 다양한 상품도 준비되어있습니다.",
-      "travelTimeToNext": "버스 이동 약 20분",
+      "title": "잔디광장에서 진행하는 조별 레크레이션",
+      "location": "함덕해수욕장 잔디광장",
+      "mapUrl": "https://maps.app.goo.gl/hFWAgnnEghWwNSpE9",
+      "description": "팀별 레크레이션 게임을 진행할 예정입니다. 편한 신발과 모자를 착용해주세요. 다양한 상품과 음료가 준비되어있습니다.",
+      "travelTimeToNext": "도보 이동 약 5분",
       "difficulty": null,
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": "images/schedule-2-스크린샷-2026-07-14-오후-3.13.19.png",
+      "photo": null,
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
@@ -110,21 +110,21 @@ window.CONTENT = {
     },
     {
       "id": 3,
-      "date": "",
-      "time": "16:20",
-      "endTime": "17:00",
-      "title": "애월 한담 해변 팀별 활동 및 자유시간",
-      "location": "애월 한담 해수욕장",
-      "mapUrl": "https://maps.app.goo.gl/2kxpenNDu2x4AGMq5",
-      "description": "애월 카페거리로 유명한 한담해변에서 자유시간을 갖습니다. ",
-      "travelTimeToNext": "버스로 이동 약 10분",
+      "date": "2026-07-30",
+      "time": "16:00",
+      "endTime": "17:30",
+      "title": "해수욕 및 샤워 (자유시간)",
+      "location": "함덕해수욕장",
+      "mapUrl": "",
+      "description": "해수욕을 진행하실 분들은 개인 세면도구(샴푸,린스,바디워시) 및 타월을 반드시 준비해주세요! ",
+      "travelTimeToNext": "버스로 이동 약 5분",
       "difficulty": null,
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": "images/schedule-3-스크린샷-2026-07-14-오후-3.16.22.png",
+      "photo": null,
       "photoUpload": {
-        "enabled": true,
+        "enabled": false,
         "formUrl": "https://forms.gle/KKuvmS6VTCrFHcgw9",
         "driveFolderUrl": "https://drive.google.com/drive/folders/1r8-WVBxoh39ymSYyNeAsYhbBD7ioKAwY?usp=drive_link",
         "description": ""
@@ -132,19 +132,19 @@ window.CONTENT = {
     },
     {
       "id": 4,
-      "date": "",
-      "time": "17:10",
-      "endTime": "18:30",
-      "title": "저녁 식사(미정)",
-      "location": "미정",
-      "mapUrl": "",
-      "description": "",
+      "date": "2026-07-30",
+      "time": "17:40",
+      "endTime": "18:40",
+      "title": "저녁 식사",
+      "location": "오리삼춘",
+      "mapUrl": "https://maps.app.goo.gl/D9WYVRNs5urjTxSu9",
+      "description": "함덕해수욕장이 한눈에 보이는 시원한 식당에 누룽지백숙이 식사로 준비됩니다.",
       "travelTimeToNext": "버스 이동 약 30분",
       "difficulty": null,
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": null,
+      "photo": "images/schedule-4-스크린샷-2026-07-20-오후-2.36.01.png",
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
@@ -154,9 +154,9 @@ window.CONTENT = {
     },
     {
       "id": 5,
-      "date": "",
-      "time": "18:30",
-      "endTime": null,
+      "date": "2026-07-30",
+      "time": "18:40",
+      "endTime": "19:10",
       "title": "드림타워 도착 및 해산",
       "location": "드림타워 주차장",
       "mapUrl": "",
@@ -166,7 +166,7 @@ window.CONTENT = {
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": null,
+      "photo": "https://maps.app.goo.gl/zEmZCFLMaf4LCSTv5",
       "photoUpload": {
         "enabled": false,
         "formUrl": "",
@@ -185,30 +185,24 @@ window.CONTENT = {
     },
     {
       "order": 2,
-      "name": "제주 9.81파크",
-      "description": "레이싱 및 서바이벌을 진행합니다.",
-      "address": "제주특별자치도 제주시 애월읍 천덕로 880-24",
-      "mapUrl": "https://maps.app.goo.gl/tdZVHUniEYV14uY66"
+      "name": "함덕해수욕장",
+      "description": "팀별 레크레이션과 해수욕을 합니다.",
+      "address": "제주특별자치도 제주시 조천읍 신북로",
+      "mapUrl": "https://maps.app.goo.gl/hFWAgnnEghWwNSpE9"
     },
     {
       "order": 3,
-      "name": "애월 한담 해변",
-      "description": "팀별 사진 미션 및 자유 시간이 있는 장소입니다.",
-      "address": "제주특별자치도 제주시 애월읍 곽지리 1359",
-      "mapUrl": "https://maps.app.goo.gl/4bJpHZkVCn65rSWw5"
-    },
-    {
-      "order": 4,
-      "name": "미정",
+      "name": "오리삼춘",
       "description": "저녁 식사가 진행되는 장소입니다.",
-      "address": "미정",
-      "mapUrl": ""
+      "address": "제주특별자치도 제주시 특별자치도 조천읍 평사길 7",
+      "mapUrl": "https://maps.app.goo.gl/D9WYVRNs5urjTxSu9"
     }
   ],
   "mapEmbedQuery": "드림타워 버스주차장",
   "checklist": [
     "편한 운동화",
-    "선크림 / 모자 / 선글라스"
+    "선크림 / 모자 / 선글라스",
+    "(해수욕 진행 시) 샴푸,린스,바디워시, 타월 등"
   ],
   "faq": [
     {
@@ -217,7 +211,7 @@ window.CONTENT = {
     },
     {
       "q": "식사 시 알레르기가 있으면 어떻게 하나요?",
-      "a": "일정표의 저녁 식사 항목에서 알레르기 정보를 확인하실 수 있습니다. 사전에 담당자에게 미리 알려주시면 대체 메뉴를 준비해드립니다."
+      "a": "사전에 담당자에게 미리 알려주시면 대체 메뉴를 준비해드립니다."
     }
   ],
   "survey": {
