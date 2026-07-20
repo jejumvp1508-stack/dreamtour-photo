@@ -22,7 +22,7 @@ window.CONTENT = {
     "survey": true,
     "flight": false
   },
-  "heroImage": "images/IMG_2533.JPG",
+  "heroImage": "images/함덕해수욕장-메인-사진.png",
   "heroTagline": "시원한 바다에서 여름나기 프로젝트!",
   "notice": {
     "active": true,
@@ -122,7 +122,7 @@ window.CONTENT = {
       "distance": null,
       "meal": null,
       "freeTimeRecommendation": null,
-      "photo": null,
+      "photo": "images/schedule-3-샤워실(1).png",
       "photoUpload": {
         "enabled": false,
         "formUrl": "https://forms.gle/KKuvmS6VTCrFHcgw9",
