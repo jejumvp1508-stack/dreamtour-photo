@@ -410,6 +410,7 @@ function renderScheduleList() {
       fieldInput("일정 제목", item, "title", { span2: true }),
       fieldInput("장소명", item, "location", { span2: true }),
       fieldInput("구글맵 링크", item, "mapUrl", { span2: true, placeholder: "https://maps.google.com/?q=..." }),
+      fieldInput("투표 링크 (선택, 예: 팀별 미션 투표용 구글폼)", item, "voteUrl", { span2: true, placeholder: "https://docs.google.com/forms/..." }),
       fieldInput("상세 설명 (펼쳤을 때 보이는 내용)", item, "description", { textarea: true, rows: 2, span2: true }),
       photoLabel,
       fieldInput("다음 장소까지 이동시간 (선택)", item, "travelTimeToNext", { placeholder: "버스 이동 약 15분" }),
@@ -648,6 +649,7 @@ function buildExportObject() {
       title: it.title || "",
       location: it.location || "",
       mapUrl: it.mapUrl || "",
+      voteUrl: it.voteUrl || "",
       description: it.description || "",
       travelTimeToNext: it.travelTimeToNext || null,
       difficulty: it.difficulty || null,
@@ -908,7 +910,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("add-schedule").addEventListener("click", () => {
     state.schedule.push({
-      id: 0, date: "", time: "", endTime: "", title: "", location: "", mapUrl: "",
+      id: 0, date: "", time: "", endTime: "", title: "", location: "", mapUrl: "", voteUrl: "",
       description: "", travelTimeToNext: "", difficulty: "", distance: "",
       meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "", description: "" }
     });
