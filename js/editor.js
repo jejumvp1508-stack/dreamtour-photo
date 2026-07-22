@@ -376,6 +376,11 @@ function renderUploadViewer(container, item) {
     fieldInput("구글 드라이브 폴더 링크 (응답 파일이 쌓이는 곳)", item.photoUpload, "driveFolderUrl", { span2: true, placeholder: "https://drive.google.com/drive/folders/..." })
   ));
 
+  container.appendChild(fieldCheckbox(
+    "🎬 참가자 화면에도 이 폴더 모아보기 갤러리 보여주기 (투표 등 모두가 결과물을 봐야 할 때만 켜세요 — 폴더가 \"링크가 있는 모든 사용자\"로 공유되어 있어야 합니다)",
+    item.photoUpload, "showGallery"
+  ));
+
   const preview = document.createElement("div");
   preview.className = "upload-viewer-preview";
   container.appendChild(preview);
@@ -667,7 +672,8 @@ function buildExportObject() {
         enabled: !!(it.photoUpload && it.photoUpload.enabled),
         formUrl: (it.photoUpload && it.photoUpload.formUrl) || "",
         driveFolderUrl: (it.photoUpload && it.photoUpload.driveFolderUrl) || "",
-        description: (it.photoUpload && it.photoUpload.description) || ""
+        description: (it.photoUpload && it.photoUpload.description) || "",
+        showGallery: !!(it.photoUpload && it.photoUpload.showGallery)
       }
     })),
     locations: state.locations.map((loc, idx) => ({
@@ -912,7 +918,7 @@ document.addEventListener("DOMContentLoaded", function () {
     state.schedule.push({
       id: 0, date: "", time: "", endTime: "", title: "", location: "", mapUrl: "", voteUrl: "",
       description: "", travelTimeToNext: "", difficulty: "", distance: "",
-      meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "", description: "" }
+      meal: null, freeTimeRecommendation: [], photo: "", photoUpload: { enabled: false, formUrl: "", driveFolderUrl: "", description: "", showGallery: false }
     });
     renderScheduleList();
     markDirty();

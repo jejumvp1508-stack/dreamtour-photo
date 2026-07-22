@@ -49,13 +49,26 @@ function buildUploadCard(item) {
     return wrap;
   }
 
-  // 참가자 화면에는 업로드 폴더 미리보기를 보여주지 않습니다 (드라이브 폴더가
-  // "링크가 있는 모든 사용자"로 공유되어 있지 않으면 "액세스 권한 필요" 에러가
-  // 보이는 문제도 있고, 운영팀 확인용은 편집기 쪽에 이미 따로 있습니다).
+  // 참가자 화면에는 기본적으로 업로드 폴더 미리보기를 보여주지 않습니다 (드라이브
+  // 폴더가 "링크가 있는 모든 사용자"로 공유되어 있지 않으면 "액세스 권한 필요"
+  // 에러가 보이는 문제도 있고, 다른 참가자의 사진을 공개로 노출하고 싶지 않은
+  // 경우가 많기 때문입니다). 투표 등 모두가 결과물을 봐야 하는 활동에 한해서만
+  // photoUpload.showGallery 를 true로 켜서 갤러리를 보여줍니다.
   let html = pu.description
     ? '<div class="upload-description">' + escapeHtml(pu.description) + "</div>"
     : "";
   html += '<a class="upload-pick-btn upload-form-link" href="' + pu.formUrl + '" target="_blank" rel="noopener noreferrer">📸 사진 올리러 가기 (구글폼 열기)</a>';
+
+  if (pu.showGallery) {
+    const embedUrl = driveFolderEmbedUrl(pu.driveFolderUrl);
+    html += embedUrl
+      ? '<div class="upload-gallery-embed-label">🎬 모아보기</div><div class="upload-gallery-embed"><iframe src="' + embedUrl + '" loading="lazy" title="업로드된 파일 모아보기"></iframe></div>'
+      : '<div class="upload-viewer-note">업로드된 파일이 여기에 모여서 보일 예정입니다.</div>';
+  }
+
+  if (item.voteUrl) {
+    html += '<a class="btn btn-map upload-vote-link" href="' + escapeHtml(item.voteUrl) + '" target="_blank" rel="noopener noreferrer">🗳️ 투표하러 가기</a>';
+  }
 
   wrap.innerHTML = html;
   return wrap;

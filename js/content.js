@@ -105,8 +105,9 @@ window.CONTENT = {
       "photoUpload": {
         "enabled": true,
         "formUrl": "https://forms.gle/91fueoqtoXX9QbgR9",
-        "driveFolderUrl": "",
-        "description": "제주 30초 릴스 챌린지 영상은 조별 대표 1명만 올려주세요!"
+        "driveFolderUrl": "https://drive.google.com/drive/folders/1s7DaAUHaXtGlAyvLCL5AjF_AUVLSzIsL?usp=sharing",
+        "description": "제주 30초 릴스 챌린지 영상은 조별 대표 1명만 올려주세요!",
+        "showGallery": true
       }
     },
     {
